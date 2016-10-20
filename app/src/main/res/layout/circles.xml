@@ -12,7 +12,7 @@
         style="@style/blueCircle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
+
         android:padding="@dimen/size30dp"
         android:onClick="onClick"/>
     <ImageView
@@ -52,7 +52,6 @@
             style="@style/peachCircle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
             android:padding="@dimen/size30dp"
             android:onClick="onClick"/>
         <ImageView
@@ -74,8 +73,8 @@
             android:padding="@dimen/size30dp"
             android:onClick="onClick"/>
         <ImageView
-            android:id="@+id/voilet"
-            style="@style/voiletCircle"
+            android:id="@+id/violet"
+            style="@style/violetCircle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/cyan"
@@ -91,7 +90,7 @@
         android:id="@+id/cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="164dp"
+        android:layout_marginLeft="124dp"
         android:text="Cancel"
         android:textColor="@color/blue"
         android:onClick="onClick"/>

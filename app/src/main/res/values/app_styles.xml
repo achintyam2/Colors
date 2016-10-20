@@ -23,8 +23,8 @@
     <style name="cyanCircle">
         <item name="android:background">@drawable/l_cyan_circle</item>
     </style>
-    <style name="voiletCircle">
-        <item name="android:background">@drawable/l_voilet_circle</item>
+    <style name="violetCircle">
+        <item name="android:background">@drawable/l_violet_circle</item>
     </style>
 
 
