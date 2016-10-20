@@ -1,0 +1,15 @@
+<resources>
+
+    
+    <dimen name="size1dp">1dp</dimen>
+    <dimen name="size2dp">2dp</dimen>
+    <dimen name="size3dp">3dp</dimen>
+    <dimen name="size4dp">4dp</dimen>
+    <dimen name="size6dp">6dp</dimen>
+    <dimen name="size8dp">8dp</dimen>
+    <dimen name="size10dp">10dp</dimen>
+    <dimen name="size12dp">12dp</dimen>
+    <dimen name="size15dp">15dp</dimen>
+
+
+</resources>
