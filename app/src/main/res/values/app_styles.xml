@@ -14,6 +14,18 @@
     <style name="orangeCircle">
         <item name="android:background">@drawable/l_orange_circle</item>
     </style>
+    <style name="peachCircle">
+        <item name="android:background">@drawable/l_peach_circle</item>
+    </style>
+    <style name="yellowCircle">
+        <item name="android:background">@drawable/l_yellow_circle</item>
+    </style>
+    <style name="cyanCircle">
+        <item name="android:background">@drawable/l_cyan_circle</item>
+    </style>
+    <style name="voiletCircle">
+        <item name="android:background">@drawable/l_voilet_circle</item>
+    </style>
 
 
 </resources>

@@ -7,4 +7,8 @@
     <color name="green">#0ec20e</color>
     <color name="red">#ff0000</color>
     <color name="orange">#de580a</color>
+    <color name="peach">#facaad</color>
+    <color name="yellow">#f4d804</color>
+    <color name="cyan">#0ad0da</color>
+    <color name="voilet">#9b03ce</color>
 </resources>

@@ -5,33 +5,103 @@
 
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp">
     <ImageView
         android:id="@+id/blue"
         style="@style/blueCircle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/size15dp" />
+        android:layout_marginLeft="40dp"
+        android:padding="@dimen/size30dp"
+        android:onClick="onClick"/>
     <ImageView
         android:id="@+id/green"
         style="@style/greenCircle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/blue"
-        android:padding="@dimen/size15dp" />
+        android:layout_marginLeft="20dp"
+        android:padding="@dimen/size30dp"
+        android:onClick="onClick"/>
     <ImageView
         android:id="@+id/red"
         style="@style/redCircle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/green"
-        android:padding="@dimen/size15dp" />
+        android:layout_marginLeft="20dp"
+        android:padding="@dimen/size30dp"
+        android:onClick="onClick"/>
     <ImageView
         android:id="@+id/orange"
         style="@style/orangeCircle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/red"
-        android:padding="@dimen/size15dp" />
+        android:layout_marginLeft="20dp"
+        android:padding="@dimen/size30dp"
+        android:onClick="onClick"/>
 </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+        <ImageView
+            android:id="@+id/peach"
+            style="@style/peachCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:padding="@dimen/size30dp"
+            android:onClick="onClick"/>
+        <ImageView
+            android:id="@+id/yellow"
+            style="@style/yellowCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/peach"
+            android:layout_marginLeft="20dp"
+            android:padding="@dimen/size30dp"
+            android:onClick="onClick"/>
+        <ImageView
+            android:id="@+id/cyan"
+            style="@style/cyanCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/yellow"
+            android:layout_marginLeft="20dp"
+            android:padding="@dimen/size30dp"
+            android:onClick="onClick"/>
+        <ImageView
+            android:id="@+id/voilet"
+            style="@style/voiletCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/cyan"
+            android:layout_marginLeft="20dp"
+            android:padding="@dimen/size30dp"
+            android:onClick="onClick"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="310dp">
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="164dp"
+        android:text="Cancel"
+        android:textColor="@color/blue"
+        android:onClick="onClick"/>
+        <Button
+            android:id="@+id/accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/cancel"
+            android:text="Accept"
+            android:textColor="@color/blue"
+            android:onClick="onClick"/>
+    </RelativeLayout>
 </LinearLayout>

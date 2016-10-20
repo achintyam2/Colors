@@ -6,8 +6,8 @@
     <stroke android:color="#c8c7c7" android:width="@dimen/size1dp"/>
 
     <size
-        android:height="@dimen/size15dp"
-        android:width="@dimen/size15dp" />
+        android:height="@dimen/size30dp"
+        android:width="@dimen/size30dp" />
 
     <solid android:color="@color/blue" />
 
