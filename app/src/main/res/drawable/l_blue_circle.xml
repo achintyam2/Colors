@@ -9,6 +9,6 @@
         android:height="@dimen/size15dp"
         android:width="@dimen/size15dp" />
 
-    <solid android:color="@color/colorPrimaryDark" />
+    <solid android:color="@color/blue" />
 
 </shape>
