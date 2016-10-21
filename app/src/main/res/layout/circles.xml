@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 <RelativeLayout
     android:layout_width="match_parent"
@@ -12,36 +12,32 @@
         style="@style/blueCircle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:padding="@dimen/size30dp"
-        android:onClick="onClick"/>
+        android:layout_marginLeft="@dimen/size10dp"
+        />
     <ImageView
         android:id="@+id/green"
         style="@style/greenCircle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/blue"
-        android:layout_marginLeft="20dp"
-        android:padding="@dimen/size30dp"
-        android:onClick="onClick"/>
+        android:layout_marginLeft="@dimen/size20dp"
+        />
     <ImageView
         android:id="@+id/red"
         style="@style/redCircle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/green"
-        android:layout_marginLeft="20dp"
-        android:padding="@dimen/size30dp"
-        android:onClick="onClick"/>
+        android:layout_marginLeft="@dimen/size20dp"
+        />
     <ImageView
         android:id="@+id/orange"
         style="@style/orangeCircle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/red"
-        android:layout_marginLeft="20dp"
-        android:padding="@dimen/size30dp"
-        android:onClick="onClick"/>
+        android:layout_marginLeft="@dimen/size20dp"
+        />
 </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -52,48 +48,46 @@
             style="@style/peachCircle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/size30dp"
-            android:onClick="onClick"/>
+            android:layout_marginLeft="@dimen/size10dp"
+            />
         <ImageView
             android:id="@+id/yellow"
             style="@style/yellowCircle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/peach"
-            android:layout_marginLeft="20dp"
-            android:padding="@dimen/size30dp"
-            android:onClick="onClick"/>
+            android:layout_marginLeft="@dimen/size20dp"
+            />
         <ImageView
             android:id="@+id/cyan"
             style="@style/cyanCircle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/yellow"
-            android:layout_marginLeft="20dp"
-            android:padding="@dimen/size30dp"
-            android:onClick="onClick"/>
+            android:layout_marginLeft="@dimen/size20dp"
+            />
         <ImageView
             android:id="@+id/violet"
             style="@style/violetCircle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/cyan"
-            android:layout_marginLeft="20dp"
-            android:padding="@dimen/size30dp"
-            android:onClick="onClick"/>
+            android:layout_marginLeft="@dimen/size20dp"
+            />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="310dp">
+        android:layout_marginTop="@dimen/size20dp"
+        >
     <Button
         android:id="@+id/cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="124dp"
+        android:layout_marginLeft="104dp"
         android:text="Cancel"
         android:textColor="@color/blue"
-        android:onClick="onClick"/>
+        />
         <Button
             android:id="@+id/accept"
             android:layout_width="wrap_content"
@@ -101,6 +95,6 @@
             android:layout_toRightOf="@+id/cancel"
             android:text="Accept"
             android:textColor="@color/blue"
-            android:onClick="onClick"/>
+            />
     </RelativeLayout>
 </LinearLayout>
