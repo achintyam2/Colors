@@ -2,6 +2,8 @@ package fragments.android.com.colors;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -9,6 +11,8 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -77,17 +81,16 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
         return rootView;
     }
     @Override
-    public void onClick (View v)
-    {
-        int id=v.getId();
-        Log.d(TAG,"ID "+id);
-        if(id>= R.id.blue && id<=R.id.violet )
-            switchVariable =0;
-        else if(id==R.id.cancel)
-            switchVariable =1;
+    public void onClick (View v) {
+        int id = v.getId();
+        Log.d(TAG, "ID " + id);
+        if (id >= R.id.blue && id <= R.id.violet)
+            switchVariable = 0;
+        else if (id == R.id.cancel)
+            switchVariable = 1;
         else
-        switchVariable =2;
-        switch (switchVariable){
+            switchVariable = 2;
+        switch (switchVariable) {
             case 0:
                 if (previousSelection != null && v.getId() == previousSelection.getId()) {
                     ((ImageView) v).setImageResource(R.drawable.ic_done_black_24dp);
@@ -99,18 +102,46 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
                     }
                     previousSelection = (ImageView) v;
                     setColor = colors.get(id);
-                    Log.d(TAG,"SetColor "+setColor);
+                    Log.d(TAG, "SetColor " + setColor);
                 }
                 break;
             case 1:
                 dismiss();
                 break;
             case 2:
-                Log.d(TAG,"SetColor "+setColor);
+                Log.d(TAG, "SetColor " + setColor);
                 MainActivity call = (MainActivity) getActivity();
                 call.onDialogFragmentClicked(setColor);
                 dismiss();
                 break;
         }
+    }
+
+    private void setStatusBarColor(int color) {
+
+        try {
+            int bg_color = getDarkerShade(color);
+            if (bg_color == -1) return;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Window window = this.getWindow();
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.setStatusBarColor(bg_color);
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public int getDarkerShade(int color){
+        double fraction = 0.25;
+        int red = (int) Math.round(Math.max(0, Color.red(color) - 255 * fraction));
+        int green = (int) Math.round(Math.max(0, Color.green(color) - 255 * fraction));
+        int blue = (int) Math.round(Math.max(0, Color.blue(color) - 255 * fraction));
+
+        int alpha = Color.alpha(color);
+
+        int darkColor = Color.argb(alpha, red, green, blue);
+        return darkColor;
     }
 }
