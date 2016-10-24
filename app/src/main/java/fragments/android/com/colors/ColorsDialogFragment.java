@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class ColorsDialogFragment extends DialogFragment implements View.OnClickListener {
-    ImageView blue, green, red, orange,peach,yellow,cyan,violet;
-    int blueContext,greenContext,redContext,orangeContext,yellowContext,peachContext,cyanContext,violetContext;
-    ImageView previousSelection;
+    ImageView blue, green, red, orange,peach,yellow,cyan,violet,previousSelection;
+    int setColor, switchVariable;
     int presentSelection=-1;
-    private static final String TAG="MyDialogFragment";
+    private static final String TAG="ColorsDialogFragment";
     private Context context;
     private DialogFragmentClickHandler caller;
     Button cancel,accept;
+    SparseArray<Integer> colors = new SparseArray<>();
 
     public ColorsDialogFragment(){}
 
@@ -42,7 +43,6 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.circles, container, false);
-
+        getDialog().setTitle("Theme Color");
         blue = (ImageView) rootView.findViewById(R.id.blue);
         green = (ImageView) rootView.findViewById(R.id.green);
         red = (ImageView) rootView.findViewById(R.id.red);
@@ -61,60 +61,56 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
         violet = (ImageView) rootView.findViewById(R.id.violet);
         cancel = (Button) rootView.findViewById(R.id.cancel);
         accept = (Button) rootView.findViewById(R.id.accept);
-        blueContext = ContextCompat.getColor(context, R.color.blue);
-        greenContext = ContextCompat.getColor(context, R.color.green);
-        redContext = ContextCompat.getColor(context, R.color.red);
-        orangeContext = ContextCompat.getColor(context, R.color.orange);
-        peachContext = ContextCompat.getColor(context, R.color.peach);
-        yellowContext = ContextCompat.getColor(context, R.color.yellow);
-        cyanContext = ContextCompat.getColor(context, R.color.cyan);
-        violetContext = ContextCompat.getColor(context, R.color.violet);
-        getDialog().setTitle("Theme Color");
-        blue.setOnClickListener(this);
-        green.setOnClickListener(this);
-        red.setOnClickListener(this);
-        peach.setOnClickListener(this);
-        yellow.setOnClickListener(this);
-        cyan.setOnClickListener(this);
-        violet.setOnClickListener(this);
-        orange.setOnClickListener(this);
-        cancel.setOnClickListener(this);
-        accept.setOnClickListener(this);
+        colors.put(blue.getId(), ContextCompat.getColor(context, R.color.blue));
+        colors.put(green.getId(), ContextCompat.getColor(context, R.color.green));
+        colors.put(red.getId(), ContextCompat.getColor(context, R.color.red));
+        colors.put(orange.getId(), ContextCompat.getColor(context, R.color.orange));
+        colors.put(peach.getId(), ContextCompat.getColor(context, R.color.peach));
+        colors.put(yellow.getId(), ContextCompat.getColor(context, R.color.yellow));
+        colors.put(cyan.getId(), ContextCompat.getColor(context, R.color.cyan));
+        colors.put(violet.getId(), ContextCompat.getColor(context, R.color.violet));
 
+        blue.setOnClickListener(this);green.setOnClickListener(this);red.setOnClickListener(this);peach.setOnClickListener(this);
+        yellow.setOnClickListener(this);cyan.setOnClickListener(this);violet.setOnClickListener(this);orange.setOnClickListener(this);
+        cancel.setOnClickListener(this);accept.setOnClickListener(this);
 
         return rootView;
     }
     @Override
     public void onClick (View v)
     {
-
-        int a=v.getId();
-        Log.d(TAG,"ID "+a);
-        if(a>= 2131427414 && a<=2131427421 ) {
-            if (previousSelection != null && v.getId() == previousSelection.getId()) {
-                ((ImageView) v).setImageResource(R.drawable.ic_done_black_24dp);
-            } else {
-                ((ImageView) v).setImageResource(R.drawable.ic_done_black_24dp);
-                presentSelection = v.getId();
-                if (previousSelection != null && presentSelection != previousSelection.getId()) {
-                    previousSelection.setImageResource(R.drawable.ic_done_blank_24dp);
-                }
-                previousSelection = (ImageView) v;
-            }
-        }
-        else if(a==2131427422)
-        {
-            dismiss();
-        }
+        int id=v.getId();
+        Log.d(TAG,"ID "+id);
+        if(id>= R.id.blue && id<=R.id.violet )
+            switchVariable =0;
+        else if(id==R.id.cancel)
+            switchVariable =1;
         else
-        {
-             //ColorDrawable drawable = (ColorDrawable) previousSelection.getBackground();
-             //presentSelection=drawable.getColor();
-            MainActivity call = (MainActivity) getActivity();
-            call.onDialogFragmentClicked(presentSelection);
-            dismiss();
+        switchVariable =2;
+        switch (switchVariable){
+            case 0:
+                if (previousSelection != null && v.getId() == previousSelection.getId()) {
+                    ((ImageView) v).setImageResource(R.drawable.ic_done_black_24dp);
+                } else {
+                    ((ImageView) v).setImageResource(R.drawable.ic_done_black_24dp);
+                    presentSelection = v.getId();
+                    if (previousSelection != null && presentSelection != previousSelection.getId()) {
+                        previousSelection.setImageResource(R.drawable.ic_done_blank_24dp);
+                    }
+                    previousSelection = (ImageView) v;
+                    setColor = colors.get(id);
+                    Log.d(TAG,"SetColor "+setColor);
+                }
+                break;
+            case 1:
+                dismiss();
+                break;
+            case 2:
+                Log.d(TAG,"SetColor "+setColor);
+                MainActivity call = (MainActivity) getActivity();
+                call.onDialogFragmentClicked(setColor);
+                dismiss();
+                break;
         }
-
     }
-
 }
