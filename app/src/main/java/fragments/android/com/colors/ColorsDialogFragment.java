@@ -132,10 +132,11 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
             case 2:
                 Log.d(TAG, "SetColor " + setColor);
                 MainActivity call = (MainActivity) getActivity();
-                if(setColor!=0)
+                if(setColor!=0){
                 call.onDialogFragmentClicked(setColor);
+                dismiss();
+                }
                 else
-                call.onDialogFragmentClicked(R.color.colorPrimary);
                 dismiss();
                 break;
 
