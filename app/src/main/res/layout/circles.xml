@@ -12,7 +12,7 @@
         style="@style/blueCircle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/size10dp"
+        android:layout_marginLeft="@dimen/size15dp"
         />
     <ImageView
         android:id="@+id/green"
@@ -48,7 +48,7 @@
             style="@style/peachCircle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size10dp"
+            android:layout_marginLeft="@dimen/size15dp"
             />
         <ImageView
             android:id="@+id/yellow"

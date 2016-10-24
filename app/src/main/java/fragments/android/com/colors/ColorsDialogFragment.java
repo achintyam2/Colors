@@ -65,17 +65,38 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
         violet = (ImageView) rootView.findViewById(R.id.violet);
         cancel = (Button) rootView.findViewById(R.id.cancel);
         accept = (Button) rootView.findViewById(R.id.accept);
-        colors.put(blue.getId(), ContextCompat.getColor(context, R.color.blue));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            colors.put(blue.getId(), getResources().getColor(R.color.blue, context.getTheme()));
+            colors.put(green.getId(), getResources().getColor(R.color.green, context.getTheme()));
+            colors.put(red.getId(), getResources().getColor(R.color.red, context.getTheme()));
+            colors.put(orange.getId(), getResources().getColor(R.color.orange, context.getTheme()));
+            colors.put(peach.getId(), getResources().getColor(R.color.peach, context.getTheme()));
+            colors.put(yellow.getId(), getResources().getColor(R.color.yellow, context.getTheme()));
+            colors.put(cyan.getId(), getResources().getColor(R.color.cyan, context.getTheme()));
+            colors.put(violet.getId(), getResources().getColor(R.color.violet, context.getTheme()));
+        }
+            else {
+            colors.put(blue.getId(), getResources().getColor(R.color.blue));
+            colors.put(green.getId(), getResources().getColor(R.color.green));
+            colors.put(red.getId(), getResources().getColor(R.color.red));
+            colors.put(orange.getId(), getResources().getColor(R.color.orange));
+            colors.put(peach.getId(), getResources().getColor(R.color.peach));
+            colors.put(yellow.getId(), getResources().getColor(R.color.yellow));
+            colors.put(cyan.getId(), getResources().getColor(R.color.cyan));
+            colors.put(violet.getId(), getResources().getColor(R.color.violet));
+        }
+
+        /*colors.put(blue.getId(), ContextCompat.getColor(context, R.color.blue));
         colors.put(green.getId(), ContextCompat.getColor(context, R.color.green));
         colors.put(red.getId(), ContextCompat.getColor(context, R.color.red));
         colors.put(orange.getId(), ContextCompat.getColor(context, R.color.orange));
         colors.put(peach.getId(), ContextCompat.getColor(context, R.color.peach));
         colors.put(yellow.getId(), ContextCompat.getColor(context, R.color.yellow));
         colors.put(cyan.getId(), ContextCompat.getColor(context, R.color.cyan));
-        colors.put(violet.getId(), ContextCompat.getColor(context, R.color.violet));
+        colors.put(violet.getId(), ContextCompat.getColor(context, R.color.violet));*/
 
-        blue.setOnClickListener(this);green.setOnClickListener(this);red.setOnClickListener(this);peach.setOnClickListener(this);
-        yellow.setOnClickListener(this);cyan.setOnClickListener(this);violet.setOnClickListener(this);orange.setOnClickListener(this);
+        blue.setOnClickListener(this);green.setOnClickListener(this);red.setOnClickListener(this);peach.setOnClickListener(this);yellow.setOnClickListener(this);cyan.setOnClickListener(this);violet.setOnClickListener(this);orange.setOnClickListener(this);
         cancel.setOnClickListener(this);accept.setOnClickListener(this);
 
         return rootView;
@@ -111,37 +132,13 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
             case 2:
                 Log.d(TAG, "SetColor " + setColor);
                 MainActivity call = (MainActivity) getActivity();
+                if(setColor!=0)
                 call.onDialogFragmentClicked(setColor);
+                else
+                call.onDialogFragmentClicked(R.color.colorPrimary);
                 dismiss();
                 break;
+
         }
-    }
-
-    private void setStatusBarColor(int color) {
-
-        try {
-            int bg_color = getDarkerShade(color);
-            if (bg_color == -1) return;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Window window = this.getWindow();
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                window.setStatusBarColor(bg_color);
-            }
-        } catch (Exception e) {
-        }
-    }
-
-    public int getDarkerShade(int color){
-        double fraction = 0.25;
-        int red = (int) Math.round(Math.max(0, Color.red(color) - 255 * fraction));
-        int green = (int) Math.round(Math.max(0, Color.green(color) - 255 * fraction));
-        int blue = (int) Math.round(Math.max(0, Color.blue(color) - 255 * fraction));
-
-        int alpha = Color.alpha(color);
-
-        int darkColor = Color.argb(alpha, red, green, blue);
-        return darkColor;
     }
 }
