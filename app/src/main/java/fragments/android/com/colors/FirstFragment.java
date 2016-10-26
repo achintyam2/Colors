@@ -19,7 +19,7 @@ public class FirstFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.main, container, false);
+        View v = inflater.inflate(R.layout.first_fragment, container, false);
         text = (TextView)v.findViewById(R.id.text);
         button = (Button)v.findViewById(R.id.button) ;
 
@@ -28,7 +28,7 @@ public class FirstFragment extends Fragment {
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ColorsDialogFragment newFragment = ColorsDialogFragment.newInstance();
-                newFragment.show(ft, "sdf");
+                newFragment.show(ft, "title");
             }
         });
         return v;
