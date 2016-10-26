@@ -14,19 +14,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements ColorsDialogFragment.DialogFragmentClickHandler   {
 
 
     private static final String TAG="MainActivity";
-    TextView text;
-    Button button;
     Toolbar myToolbar;
     ActionBar actionBar;
     TabLayout tabLayout;
@@ -37,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         setContentView(R.layout.activity_main);
 
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setLogo(R.mipmap.ic_launcher);
+//        myToolbar.setLogo(R.mipmap.ic_launcher);
         setSupportActionBar(myToolbar);
         actionBar = getSupportActionBar();
 
@@ -56,19 +50,13 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
             public void onTabSelected(TabLayout.Tab tab) {
                 pager.setCurrentItem(tab.getPosition());
             }
-
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
-
-
     }
 
     @Override
@@ -77,8 +65,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         Log.d(TAG,"setBackgroundColor: "+colorValue);
         colorDrawable.setColor(colorValue);
         actionBar.setBackgroundDrawable(colorDrawable);
-        actionBar.setLogo(R.mipmap.ic_launcher);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
         setStatusBarColor(colorValue);
         tabLayout.setBackgroundColor(colorValue);
     }
@@ -129,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
                 case 1:
                     SecondFragment tab2 = new SecondFragment();
                     return tab2;
-
                 default:
                     return null;
             }

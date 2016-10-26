@@ -1,14 +1,13 @@
 package fragments.android.com.colors;
 
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.app.FragmentManager;
 
 
 /**
@@ -30,12 +29,9 @@ public class FirstFragment extends Fragment {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ColorsDialogFragment newFragment = ColorsDialogFragment.newInstance();
                 newFragment.show(ft, "sdf");
-
             }
         });
-
         return v;
     }
-
 
 }

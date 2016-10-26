@@ -23,6 +23,7 @@
         android:layout_below="@+id/my_toolbar"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
+        android:textAlignment="center"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <!--<TextView
