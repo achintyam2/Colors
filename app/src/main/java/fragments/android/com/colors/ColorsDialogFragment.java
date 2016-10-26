@@ -1,18 +1,17 @@
 package fragments.android.com.colors;
 
-import android.app.DialogFragment;
-import android.content.Context;
-import android.graphics.Color;
-import android.os.Build;
+
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.FragmentTransaction;
+import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -55,6 +54,7 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
 
         View rootView = inflater.inflate(R.layout.circles, container, false);
         getDialog().setTitle("Theme Color");
+
         blue = (ImageView) rootView.findViewById(R.id.blue);
         green = (ImageView) rootView.findViewById(R.id.green);
         red = (ImageView) rootView.findViewById(R.id.red);
@@ -87,17 +87,16 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
             colors.put(violet.getId(), getResources().getColor(R.color.violet));
         }
 
-        /*colors.put(blue.getId(), ContextCompat.getColor(context, R.color.blue));
-        colors.put(green.getId(), ContextCompat.getColor(context, R.color.green));
-        colors.put(red.getId(), ContextCompat.getColor(context, R.color.red));
-        colors.put(orange.getId(), ContextCompat.getColor(context, R.color.orange));
-        colors.put(peach.getId(), ContextCompat.getColor(context, R.color.peach));
-        colors.put(yellow.getId(), ContextCompat.getColor(context, R.color.yellow));
-        colors.put(cyan.getId(), ContextCompat.getColor(context, R.color.cyan));
-        colors.put(violet.getId(), ContextCompat.getColor(context, R.color.violet));*/
-
-        blue.setOnClickListener(this);green.setOnClickListener(this);red.setOnClickListener(this);peach.setOnClickListener(this);yellow.setOnClickListener(this);cyan.setOnClickListener(this);violet.setOnClickListener(this);orange.setOnClickListener(this);
-        cancel.setOnClickListener(this);accept.setOnClickListener(this);
+        blue.setOnClickListener(this);
+        green.setOnClickListener(this);
+        red.setOnClickListener(this);
+        peach.setOnClickListener(this);
+        yellow.setOnClickListener(this);
+        cyan.setOnClickListener(this);
+        violet.setOnClickListener(this);
+        orange.setOnClickListener(this);
+        cancel.setOnClickListener(this);
+        accept.setOnClickListener(this);
 
         return rootView;
     }
@@ -139,7 +138,6 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
                 else
                 dismiss();
                 break;
-
         }
     }
 }
