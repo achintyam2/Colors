@@ -17,18 +17,21 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class MainActivity extends AppCompatActivity implements ColorsDialogFragment.DialogFragmentClickHandler   {
+public class MainActivity extends AppCompatActivity implements ColorsDialogFragment.DialogFragmentClickHandler {
 
 
-    private static final String TAG="MainActivity";
+    private static final String TAG = "MainActivity";
     Toolbar myToolbar;
     ActionBar actionBar;
     TabLayout tabLayout;
+   // CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        FacebookSdk.sdkInitialize(getApplicationContext());
 
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 //        myToolbar.setLogo(R.mipmap.ic_launcher);
@@ -43,16 +46,18 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
 
 
         final ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
-        pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount()));
+        pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()));
         pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 pager.setCurrentItem(tab.getPosition());
             }
+
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
             }
+
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
@@ -62,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
     @Override
     public void onDialogFragmentClicked(int colorValue) {
         ColorDrawable colorDrawable = new ColorDrawable();
-        Log.d(TAG,"setBackgroundColor: "+colorValue);
+        Log.d(TAG, "setBackgroundColor: " + colorValue);
         colorDrawable.setColor(colorValue);
         actionBar.setBackgroundDrawable(colorDrawable);
 //        actionBar.setDisplayHomeAsUpEnabled(true);
@@ -86,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         }
     }
 
-    public int getDarkerShade(int color){
+    public int getDarkerShade(int color) {
         double fraction = 0.25;
         int red = (int) Math.round(Math.max(0, Color.red(color) - 255 * fraction));
         int green = (int) Math.round(Math.max(0, Color.green(color) - 255 * fraction));
@@ -101,14 +106,15 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
     private class MyPagerAdapter extends FragmentPagerAdapter {
 
         int mNumTabs;
-        public MyPagerAdapter(FragmentManager fm,int numTabs) {
+
+        public MyPagerAdapter(FragmentManager fm, int numTabs) {
             super(fm);
-            this.mNumTabs=numTabs;
+            this.mNumTabs = numTabs;
         }
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
+            switch (position) {
 
                 case 0:
                     FirstFragment tab1 = new FirstFragment();
