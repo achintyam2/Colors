@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "381725125560",
+    "project_id": "firebase-colors"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381725125560:android:2515dab2f5a043c9",
+        "android_client_info": {
+          "package_name": "fragments.android.com.colors"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381725125560-kmhdnjrimkj533sdlnqemr0lvj7d8rk7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "fragments.android.com.colors",
+            "certificate_hash": "FCCB96630DA09C8E095A092FCB7F2B703CB98648"
+          }
+        },
+        {
+          "client_id": "381725125560-kcka7mh7udqdffr4447s1effmb66c5ra.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPOWWYiSzGPqBEPO0mgkSZGvYQd0OqjjQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

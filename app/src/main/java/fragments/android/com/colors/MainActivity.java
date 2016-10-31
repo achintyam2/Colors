@@ -1,12 +1,14 @@
 package fragments.android.com.colors;
 
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -24,14 +26,12 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
     Toolbar myToolbar;
     ActionBar actionBar;
     TabLayout tabLayout;
-   // CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        FacebookSdk.sdkInitialize(getApplicationContext());
 
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 //        myToolbar.setLogo(R.mipmap.ic_launcher);
@@ -39,8 +39,9 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         actionBar = getSupportActionBar();
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
+        tabLayout.addTab(tabLayout.newTab().setText("Themes"));
+        tabLayout.addTab(tabLayout.newTab().setText("Facebook"));
+        //tabLayout.addTab(tabLayout.newTab().setText("Gmail"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
@@ -122,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
                 case 1:
                     SecondFragment tab2 = new SecondFragment();
                     return tab2;
+                /*case 2:
+                     ThirdFragment tab3 =   new ThirdFragment();
+                    return tab3;*/
                 default:
                     return null;
             }
