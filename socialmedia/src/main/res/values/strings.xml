@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">SocialMedia</string>
+    <string name="action_settings">Settings</string>
+    <string name="button_name">Themes</string>
+    <string name="gmail_button">Call Gmail API</string>
+    <string name="fb_login_protocol_scheme">fb736521819836991</string>
+    <string name="facebook_app_id">736521819836991</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="friend_list">Friends List</string>
+    <string name="no_network">No network connection available.</string>
+    <string name="needs_google_access">This app needs to access your Google account (via Contacts).</string>
+    <string name="install_gps">This app requires Google Play Services. Please install Google Play Services on your device and relaunch this app. </string>
+    <string name="gmail_api_name">Gmail API Android Quickstart</string>
+    <string name="array_size">ArraySize= </string>
+    <string name="attachment"> Attachment</string>
+    <string name="attachments">Attachments</string>
+    <string name="from">From: </string>
+    <string name="to">To: </string>
+    <string name="on">On: </string>
+    <string name="error">The following error occurred:</string>
+    <string name="request_cancelled">Request cancelled.</string>
+
+</resources>

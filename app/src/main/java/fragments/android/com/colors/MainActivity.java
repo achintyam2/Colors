@@ -1,16 +1,17 @@
 package fragments.android.com.colors;
 
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,20 +19,30 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
+
+import contacts.android.socialmedia.FacebookIntegration;
+import contacts.android.socialmedia.GmailIntegration;
+import contacts.android.socialmedia.GoogleIntegration;
+import contacts.android.themeselector.ColorsDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements ColorsDialogFragment.DialogFragmentClickHandler {
 
-
+    ViewPager viewPager;
     private static final String TAG = "MainActivity";
     Toolbar myToolbar;
-    ActionBar actionBar;
     TabLayout tabLayout;
+    private Boolean flag = true;
+    Context context;
+    ActionBar actionBar;
+    GmailIntegration tab3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = this;
 
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 //        myToolbar.setLogo(R.mipmap.ic_launcher);
@@ -39,28 +50,36 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         actionBar = getSupportActionBar();
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Themes"));
         tabLayout.addTab(tabLayout.newTab().setText("Facebook"));
-        //tabLayout.addTab(tabLayout.newTab().setText("Gmail"));
+        tabLayout.addTab(tabLayout.newTab().setText("Gmail"));
+        tabLayout.addTab(tabLayout.newTab().setText("Google"));
+        //tabLayout.addTab(tabLayout.newTab().setText("Themes"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
 
-        final ViewPager pager = (ViewPager) findViewById(R.id.viewPager);
-        pager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()));
-        pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+
+        viewPager.setAdapter(pagerAdapter);
+
+        //tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                pager.setCurrentItem(tab.getPosition());
+                viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+                // Toast.makeText(context, "Unselected",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                //Toast.makeText(context, "Reselected",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -104,6 +123,20 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         return darkColor;
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+
+    }
+
     private class MyPagerAdapter extends FragmentPagerAdapter {
 
         int mNumTabs;
@@ -117,24 +150,36 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         public Fragment getItem(int position) {
             switch (position) {
 
-                case 0:
+                /*case 0:
+                    Log.d(TAG, " here: 0");
                     FirstFragment tab1 = new FirstFragment();
-                    return tab1;
-                case 1:
-                    SecondFragment tab2 = new SecondFragment();
+                    return tab1;*/
+                case 0:
+                    Log.d(TAG, " here: 0");
+                    FacebookIntegration tab2 = new FacebookIntegration();
                     return tab2;
-                /*case 2:
-                     ThirdFragment tab3 =   new ThirdFragment();
-                    return tab3;*/
+                case 1:
+                    Log.d(TAG, " here: 1");
+                    if (tab3 == null)
+                        tab3 = new GmailIntegration();
+                    return tab3;
+                case 2:
+                    Log.d(TAG, " here: 2");
+                    GoogleIntegration tab4 = new GoogleIntegration();
+                    return tab4;
+                /*case 3:
+                    Log.d(TAG, " here: 3");
+                    FirstFragment tab1 = new FirstFragment();
+                    return tab1;*/
                 default:
                     return null;
             }
         }
-
         @Override
         public int getCount() {
             return mNumTabs;
         }
+
     }
 
     /*@Override

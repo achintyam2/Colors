@@ -1,0 +1,25 @@
+<resources>
+
+    
+    <dimen name="size1dp">1dp</dimen>
+    <dimen name="size2dp">2dp</dimen>
+    <dimen name="size3dp">3dp</dimen>
+    <dimen name="size4dp">4dp</dimen>
+    <dimen name="size5dp">5dp</dimen>
+    <dimen name="size6dp">6dp</dimen>
+    <dimen name="size8dp">8dp</dimen>
+    <dimen name="size10dp">10dp</dimen>
+    <dimen name="size12dp">12dp</dimen>
+    <dimen name="size15dp">15dp</dimen>
+    <dimen name="size16dp">16dp</dimen>
+    <dimen name="size17dp">17dp</dimen>
+    <dimen name="size18dp">18dp</dimen>
+    <dimen name="size20dp">20dp</dimen>
+    <dimen name="size25dp">25dp</dimen>
+    <dimen name="size30dp">30dp</dimen>
+    <dimen name="size50dp">50dp</dimen>
+    <dimen name="size60dp">60dp</dimen>
+    <dimen name="size104dp">104dp</dimen>
+
+
+</resources>

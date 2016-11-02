@@ -1,18 +1,23 @@
-package fragments.android.com.colors;
+package contacts.android.socialmedia;
 
+import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
@@ -22,12 +27,14 @@ import com.facebook.login.widget.LoginButton;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 
-public class SecondFragment extends Fragment {
+public class FacebookIntegration extends Fragment{
+
     protected LoginButton fbButton;
     private CallbackManager callbackManager;
     final String TAG = "SecondFragment";
-    Button button ;
+    Context context;
 
     private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
         @Override
@@ -37,12 +44,12 @@ public class SecondFragment extends Fragment {
 
                     //login_result.getAccessToken(),
                     AccessToken.getCurrentAccessToken(),
-                      "/"+ login_result.getAccessToken().getUserId()+"/friends",
+                    "/"+ login_result.getAccessToken().getUserId()+"/friends",
                     null,
                     HttpMethod.GET,
                     new GraphRequest.Callback() {
                         public void onCompleted(GraphResponse response) {
-                            Intent intent = new Intent(getContext(), FriendsList.class);
+                            Intent intent = new Intent(context, FriendsList.class);
 
                             try {
 
@@ -61,12 +68,12 @@ public class SecondFragment extends Fragment {
 
         @Override
         public void onCancel() {
-            Toast.makeText(getContext(), "Cancel", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Cancel", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onError(FacebookException e) {
-            Toast.makeText(getContext(), "Error: " + e, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Error: " + e, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -74,33 +81,14 @@ public class SecondFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         callbackManager = CallbackManager.Factory.create();
-
-
-
+        context = getActivity().getApplicationContext();
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.second_fragment, container, false);
-        button = (Button) v.findViewById(R.id.button1);
-        button.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                int id = v.getId();
-                if(id==R.id.button1)
-                {
-                    Intent newIntent = new Intent(getContext(),ThirdFragment.class);
-                    newIntent.putExtra("HelloGmail","Hello");
-                    startActivity(newIntent);
-                }
-            }
-        });
-
-
+        View v = inflater.inflate(R.layout.facebook_integration, container, false);
         return v;
     }
-
 
 
     @Override
@@ -110,19 +98,58 @@ public class SecondFragment extends Fragment {
         fbButton.setReadPermissions("user_friends");
         fbButton.setFragment(this);
         fbButton.registerCallback(callbackManager, callback);
-
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
         LoginManager.getInstance().logOut();
-
-
     }
 
+    /**
+     * Created by Achintya on 27-10-2016.
+     */
+    public static class MainApplication extends Application {
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            FacebookSdk.sdkInitialize(getApplicationContext());
+        }
+    }
+
+    public static class FriendsList extends Activity {
+
+        final String TAG = "FriendsList";
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_friends_list);
+        Intent intent = getIntent();
+
+        String jsondata = intent.getStringExtra("jsondata");
+        JSONArray friendslist;
+        ArrayList<String> friends = new ArrayList<String>();
 
 
+        try {
+
+            friendslist = new JSONArray(jsondata);
+            Log.d(TAG,"friends: "+friendslist.length());
+            for (int i=0; i < friendslist.length(); i++) {
+                friends.add(friendslist.getJSONObject(i).getString("name"));
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_listview, friends); // simple textview for list item
+        ListView listView = (ListView) findViewById(R.id.listView);
+        listView.setAdapter(adapter);
+    }
+
+    }
 }

@@ -1,4 +1,4 @@
-package fragments.android.com.colors;
+package contacts.android.socialmedia;
 
 import android.app.Activity;
 import android.content.Intent;

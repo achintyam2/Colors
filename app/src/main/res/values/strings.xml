@@ -2,6 +2,7 @@
     <string name="app_name">Colors</string>
     <string name="action_settings">Settings</string>
     <string name="button_name">Themes</string>
+    <string name="gmail_button">Call Gmail API</string>
     <string name="fb_login_protocol_scheme">fb736521819836991</string>
     <string name="facebook_app_id">736521819836991</string>
     <string name="title_activity_maps">Map</string>

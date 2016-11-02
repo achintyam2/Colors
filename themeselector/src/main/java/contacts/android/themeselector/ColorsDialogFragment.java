@@ -1,4 +1,4 @@
-package fragments.android.com.colors;
+package contacts.android.themeselector;
 
 
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+
 public class ColorsDialogFragment extends DialogFragment implements View.OnClickListener {
     ImageView blue, green, red, orange,peach,yellow,cyan,violet,previousSelection;
     int setColor, switchVariable;
@@ -22,7 +23,7 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
     private DialogFragmentClickHandler caller;
     Button cancel,accept;
     SparseArray<Integer> colors = new SparseArray<>();
-
+    Boolean flag = true;
     public ColorsDialogFragment(){}
 
     public interface DialogFragmentClickHandler {
@@ -128,7 +129,7 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
                 break;
             case 2:
                 Log.d(TAG, "SetColor " + setColor);
-                MainActivity call = (MainActivity) getActivity();
+                DialogFragmentClickHandler call = (DialogFragmentClickHandler) getActivity();
                 if(setColor!=0){
                 call.onDialogFragmentClicked(setColor);
                 dismiss();

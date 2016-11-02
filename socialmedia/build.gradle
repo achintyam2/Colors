@@ -1,16 +1,16 @@
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-
+apply plugin: 'com.android.library'
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
 
     defaultConfig {
-        applicationId "fragments.android.com.colors"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -20,16 +20,17 @@ android {
     }
 }
 
-repositories {
-    mavenCentral()
-}
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('libs/javax.mail.jar')
+
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
     compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.google.android.gms:play-services-auth:9.0.0'
-//    compile 'com.google.android.gms:play-services:9.0.0'
+
     compile 'pub.devrel:easypermissions:0.1.5'
     compile('com.google.api-client:google-api-client-android:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
@@ -38,7 +39,4 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
     testCompile 'junit:junit:4.12'
-    compile project(path: ':socialmedia')
-    compile project(path: ':themeselector')
-    compile 'com.google.android.gms:play-services-appindexing:9.0.0'
 }
