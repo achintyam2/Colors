@@ -49,6 +49,8 @@ public class FacebookIntegration extends Fragment {
                 Log.d(TAG, "t2 : " + AccessToken.getCurrentAccessToken().getToken());
 
                 FacebookSdk.addLoggingBehavior(LoggingBehavior.REQUESTS);
+
+                //TODO Retrieving Complete FriendList of the user
                 GraphRequest request = GraphRequest.newGraphPathRequest(    //Creating a new request
                         AccessToken.getCurrentAccessToken(),
                         "/me/friends/",
