@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <Button
         android:id="@+id/api_button"
@@ -23,14 +24,21 @@
         android:visibility="gone"
         />
 
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/api_button"
+        android:layout_centerHorizontal="true"
+        >
+
     <ImageView
         android:id="@+id/i1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/gmail_launcher"
-        android:layout_marginTop="@dimen/size50dp"
+        android:layout_marginTop="@dimen/size20dp"
         android:padding="@dimen/size10dp"
-        android:layout_below="@+id/api_button"
         android:visibility="gone"
         />
 
@@ -38,11 +46,11 @@
         android:id="@+id/contact_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/api_button"
         android:layout_toRightOf="@id/i1"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:layout_marginTop="@dimen/size60dp"
+        android:layout_marginTop="@dimen/size30dp"
+        android:layout_centerHorizontal="true"
         android:textSize="@dimen/size20dp"/>
     <TextView
         android:id="@+id/details"
@@ -61,11 +69,13 @@
         android:textSize="@dimen/size15dp"
         android:paddingTop="@dimen/size5dp"
         android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
         android:textAlignment="inherit"/>
     <ImageView
         android:id="@+id/attachment_symbol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/ic_attachment_black_24dp"
         android:layout_below="@+id/snippet"
         android:layout_toRightOf="@+id/i1"
@@ -78,9 +88,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/snippet"
         android:textSize="@dimen/size16dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/size1dp"
         android:textColor="@color/black"
         android:layout_toRightOf="@+id/attachment_symbol"
         />
+
+        </RelativeLayout>
 
 </RelativeLayout>

@@ -24,9 +24,11 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
     Button cancel,accept;
     SparseArray<Integer> colors = new SparseArray<>();
     Boolean flag = true;
+    DialogFragmentClickHandler call;
+
     public ColorsDialogFragment(){}
 
-    public interface DialogFragmentClickHandler {
+    public interface DialogFragmentClickHandler {         //Creating a interface to communicate between the fragments
         void onDialogFragmentClicked(int colorValue);
     }
 
@@ -97,6 +99,8 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
         cancel.setOnClickListener(this);
         accept.setOnClickListener(this);
 
+
+
         return rootView;
     }
     @Override
@@ -129,7 +133,7 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
                 break;
             case 2:
                 Log.d(TAG, "SetColor " + setColor);
-                DialogFragmentClickHandler call = (DialogFragmentClickHandler) getActivity();
+                 call = (DialogFragmentClickHandler) getActivity();
                 if(setColor!=0){
                 call.onDialogFragmentClicked(setColor);
                 dismiss();
@@ -139,4 +143,5 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
                 break;
         }
     }
+
 }

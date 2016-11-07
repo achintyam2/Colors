@@ -4,14 +4,10 @@ package fragments.android.com.colors;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,8 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
-
 import contacts.android.socialmedia.FacebookIntegration;
 import contacts.android.socialmedia.GmailIntegration;
 import contacts.android.socialmedia.GoogleIntegration;
@@ -29,49 +23,67 @@ import contacts.android.themeselector.ColorsDialogFragment;
 public class MainActivity extends AppCompatActivity implements ColorsDialogFragment.DialogFragmentClickHandler {
 
     ViewPager viewPager;
+    int settingColor;
     private static final String TAG = "MainActivity";
     Toolbar myToolbar;
     TabLayout tabLayout;
-    private Boolean flag = true;
     Context context;
     ActionBar actionBar;
-    GmailIntegration tab3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        context = this;
+        context = this;                  //Setting the context to this activity
 
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 //        myToolbar.setLogo(R.mipmap.ic_launcher);
-        setSupportActionBar(myToolbar);
-        actionBar = getSupportActionBar();
+        setSupportActionBar(myToolbar);                          //Designating a Toolbar as the action bar for an Activity
+        actionBar = getSupportActionBar();                       //Retrieve an instance of ActionBar by calling getSupportActionBar()
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Facebook"));
-        tabLayout.addTab(tabLayout.newTab().setText("Gmail"));
-        tabLayout.addTab(tabLayout.newTab().setText("Google"));
-        //tabLayout.addTab(tabLayout.newTab().setText("Themes"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        tabLayout.addTab(tabLayout.newTab().setText("Facebook"));   //Adding the tab to the viewpager
+        tabLayout.addTab(tabLayout.newTab().setText("Gmail"));      //Adding the tab to the viewpager
+        tabLayout.addTab(tabLayout.newTab().setText("Google"));     //Adding the tab to the viewpager
+        tabLayout.addTab(tabLayout.newTab().setText("Themes"));     //Adding the tab to the viewpager
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);            //Setting the gravity to use when laying out the tabs.
+        tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary)); //Setting the background colour the the default tab
 
+        if(savedInstanceState != null)              //When the orientation changes retrieving back the saved instances
+        {
+
+            String getSnippet = savedInstanceState.getString("snippet");
+            Log.d(TAG,"getSnippet "+getSnippet);
+            String getAttachment = savedInstanceState.getString("attachment");
+            String getSubject = savedInstanceState.getString("subject");
+            String getSender = savedInstanceState.getString("from");
+            String getReceiver = savedInstanceState.getString("to");
+            String getDate = savedInstanceState.getString("date");
+            settingColor = savedInstanceState.getInt("color");
+            if(settingColor == 0)
+            {
+                tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            }
+            else {
+                setSupportActionBar(myToolbar);
+                actionBar = getSupportActionBar();
+                onDialogFragmentClicked(settingColor);              //Calling the method to set the colour to the actionBar
+            }
+        }
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-
-        viewPager.setAdapter(pagerAdapter);
+        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()); //Setting the viewpager through PagerAdapter accroding to the getTabCount() value
+        viewPager.setAdapter(pagerAdapter);        //Setting the adapter to the viewPager
 
         //tabLayout.setupWithViewPager(viewPager);
 
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout)); //Changing from one tab to another
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
             }
-
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 // Toast.makeText(context, "Unselected",Toast.LENGTH_LONG).show();
@@ -86,13 +98,15 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
 
     @Override
     public void onDialogFragmentClicked(int colorValue) {
+
         ColorDrawable colorDrawable = new ColorDrawable();
         Log.d(TAG, "setBackgroundColor: " + colorValue);
-        colorDrawable.setColor(colorValue);
+        colorDrawable.setColor(colorValue);                 //Setting the color to the bar
         actionBar.setBackgroundDrawable(colorDrawable);
 //        actionBar.setDisplayHomeAsUpEnabled(true);
-        setStatusBarColor(colorValue);
+        setStatusBarColor(colorValue);                      //Setting the color to the statusbar
         tabLayout.setBackgroundColor(colorValue);
+        settingColor = colorValue;
     }
 
     private void setStatusBarColor(int color) {
@@ -101,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
             int bg_color = getDarkerShade(color);
             if (bg_color == -1) return;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {    //If the SDK version is >=21 then setting the colour of the status bar
                 Window window = this.getWindow();
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -127,59 +141,11 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     @Override
     public void onStop() {
         super.onStop();
-
-
-    }
-
-    private class MyPagerAdapter extends FragmentPagerAdapter {
-
-        int mNumTabs;
-
-        public MyPagerAdapter(FragmentManager fm, int numTabs) {
-            super(fm);
-            this.mNumTabs = numTabs;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-
-                /*case 0:
-                    Log.d(TAG, " here: 0");
-                    FirstFragment tab1 = new FirstFragment();
-                    return tab1;*/
-                case 0:
-                    Log.d(TAG, " here: 0");
-                    FacebookIntegration tab2 = new FacebookIntegration();
-                    return tab2;
-                case 1:
-                    Log.d(TAG, " here: 1");
-                    if (tab3 == null)
-                        tab3 = new GmailIntegration();
-                    return tab3;
-                case 2:
-                    Log.d(TAG, " here: 2");
-                    GoogleIntegration tab4 = new GoogleIntegration();
-                    return tab4;
-                /*case 3:
-                    Log.d(TAG, " here: 3");
-                    FirstFragment tab1 = new FirstFragment();
-                    return tab1;*/
-                default:
-                    return null;
-            }
-        }
-        @Override
-        public int getCount() {
-            return mNumTabs;
-        }
-
     }
 
     /*@Override
@@ -206,5 +172,12 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
 
         }
     }*/
+    @Override
+    public void onSaveInstanceState(Bundle outState) {  //Saving the color value of the item to use it when orientation changes
+        super.onSaveInstanceState(outState);
+        outState.putInt("color", settingColor);
+
+    }
+
 
 }
