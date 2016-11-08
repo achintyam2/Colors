@@ -11,7 +11,6 @@ import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.util.Log;
 import android.view.MenuItem;
-
 import static fragments.android.com.colors.SettingsActivity.bindPreferenceSummaryToValue;
 
 /**
@@ -19,9 +18,9 @@ import static fragments.android.com.colors.SettingsActivity.bindPreferenceSummar
  * activity is showing a two-pane settings UI.
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class SettingsPreferenceFragment extends PreferenceFragment{
+public class SettingsPreferenceFragment extends PreferenceFragment {
 
-    public SwitchPreference wifi,bluetooth;
+    public SwitchPreference wifi, bluetooth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,13 +32,13 @@ public class SettingsPreferenceFragment extends PreferenceFragment{
         wifi = (SwitchPreference) findPreference("example_wifi");
         bluetooth = (SwitchPreference) findPreference("example_bluetooth");
 
-        if (wifi!=null) {
+        if (wifi != null) {
             wifi.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    boolean test = Boolean.parseBoolean(newValue.toString());
-                    Log.d("tag", "test " + test);
-                    if (test)
+                    boolean wifi_test = Boolean.parseBoolean(newValue.toString());
+                    Log.d("tag", "Is Wifi on: " + wifi_test);
+                    if (wifi_test)
                         wifi.setSummary("Enabled");
                     else
                         wifi.setSummary("Disabled");
@@ -48,28 +47,28 @@ public class SettingsPreferenceFragment extends PreferenceFragment{
                 }
             });
         }
-            if (bluetooth!=null) {
-                bluetooth.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
-                        boolean test = Boolean.parseBoolean(newValue.toString());
-                        Log.d("tag", "test " + test);
-                        if (test)
-                            bluetooth.setSummary("Enabled");
-                        else
-                            bluetooth.setSummary("Disabled");
+        if (bluetooth != null) {
+            bluetooth.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean bluetooth_test = Boolean.parseBoolean(newValue.toString());
+                    Log.d("tag", "Is Bluetooth on: " + bluetooth_test);
+                    if (bluetooth_test)
+                        bluetooth.setSummary("Enabled");
+                    else
+                        bluetooth.setSummary("Disabled");
 
-                        return true;
-                    }
-                });
+                    return true;
+                }
+            });
         }
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_settings_text"));
-            bindPreferenceSummaryToValue(findPreference("example_settings_list"));
-        }
+        // Bind the summaries of EditText/List/Dialog/Ringtone preferences
+        // to their values. When their values change, their summaries are
+        // updated to reflect the new value, per the Android Design
+        // guidelines.
+        bindPreferenceSummaryToValue(findPreference("example_settings_text"));
+        bindPreferenceSummaryToValue(findPreference("example_settings_list"));
+    }
 
 
     @Override
