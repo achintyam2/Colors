@@ -80,20 +80,6 @@ public class SettingsPreferenceFragment extends PreferenceFragment {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    SharedPreferences.OnSharedPreferenceChangeListener listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals("example_wifi")) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                boolean test = preferences.getBoolean("example_wifi", false);
-                Log.d("h", "test = " + test);
-                if (test)
-                    wifi.setSummary("Enabled");
-                else
-                    wifi.setSummary("Disabled");
-            }
-        }
-    };
 }
 
 
