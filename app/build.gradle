@@ -40,5 +40,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(path: ':socialmedia')
     compile project(path: ':themeselector')
+    compile project(path: ':dialpaddialogfragment')
     compile 'com.google.android.gms:play-services-appindexing:9.0.0'
+    compile 'com.melnykov:floatingactionbutton:1.3.0'
 }

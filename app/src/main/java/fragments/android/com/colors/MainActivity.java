@@ -7,21 +7,22 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import contacts.android.socialmedia.FacebookIntegration;
-import contacts.android.socialmedia.GmailIntegration;
-import contacts.android.socialmedia.GoogleIntegration;
 import contacts.android.themeselector.ColorsDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements ColorsDialogFragment.DialogFragmentClickHandler {
 
+    PagerAdapter pagerAdapter;
+    int position;
     ViewPager viewPager;
     int settingColor;
     private static final String TAG = "MainActivity";
@@ -46,20 +47,14 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         tabLayout.addTab(tabLayout.newTab().setText("Facebook"));   //Adding the tab to the viewpager
         tabLayout.addTab(tabLayout.newTab().setText("Gmail"));      //Adding the tab to the viewpager
         tabLayout.addTab(tabLayout.newTab().setText("Google"));     //Adding the tab to the viewpager
-        tabLayout.addTab(tabLayout.newTab().setText("Themes"));     //Adding the tab to the viewpager
+        tabLayout.addTab(tabLayout.newTab().setText("Dialer"));     //Adding the tab to the viewpager
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);            //Setting the gravity to use when laying out the tabs.
         tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary)); //Setting the background colour the the default tab
 
         if(savedInstanceState != null)              //When the orientation changes retrieving back the saved instances
         {
 
-            String getSnippet = savedInstanceState.getString("snippet");
-            Log.d(TAG,"getSnippet "+getSnippet);
-            String getAttachment = savedInstanceState.getString("attachment");
-            String getSubject = savedInstanceState.getString("subject");
-            String getSender = savedInstanceState.getString("from");
-            String getReceiver = savedInstanceState.getString("to");
-            String getDate = savedInstanceState.getString("date");
+
             settingColor = savedInstanceState.getInt("color");
             if(settingColor == 0)
             {
@@ -72,8 +67,9 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
             }
         }
 
+
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()); //Setting the viewpager through PagerAdapter accroding to the getTabCount() value
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()); //Setting the viewpager through PagerAdapter accroding to the getTabCount() value
         viewPager.setAdapter(pagerAdapter);        //Setting the adapter to the viewPager
 
         //tabLayout.setupWithViewPager(viewPager);
@@ -83,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                position = tab.getPosition();
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
@@ -148,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         super.onStop();
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {                   //Creating Menu Options
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -156,28 +153,27 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
-                return true;
-
-            case R.id.action_favorite:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
+            case R.id.menu_themes:
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ColorsDialogFragment newFragment = ColorsDialogFragment.newInstance();
+                newFragment.show(ft, "title");
                 return true;
 
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
         }
-    }*/
+    }
     @Override
     public void onSaveInstanceState(Bundle outState) {  //Saving the color value of the item to use it when orientation changes
         super.onSaveInstanceState(outState);
         outState.putInt("color", settingColor);
-
     }
 
+    @Override
+    public void onBackPressed(){
+
+        super.onBackPressed();
+    }
 
 }

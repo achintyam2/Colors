@@ -1,6 +1,7 @@
 package contacts.android.themeselector;
 
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
     DialogFragmentClickHandler call;
 
     public ColorsDialogFragment(){}
+
 
     public interface DialogFragmentClickHandler {         //Creating a interface to communicate between the fragments
         void onDialogFragmentClicked(int colorValue);

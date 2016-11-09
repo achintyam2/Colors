@@ -40,7 +40,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
             return tab3;
         case 3:
             Log.d(TAG, " here: 3");
-            FirstFragment tab4 = new FirstFragment();
+            DialerFragment tab4 = new DialerFragment();
             return tab4;
         default:
             return null;
