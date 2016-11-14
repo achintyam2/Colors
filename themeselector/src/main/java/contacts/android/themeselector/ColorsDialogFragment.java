@@ -1,7 +1,6 @@
 package contacts.android.themeselector;
 
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;

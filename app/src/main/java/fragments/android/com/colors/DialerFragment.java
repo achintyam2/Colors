@@ -13,33 +13,35 @@ import android.widget.LinearLayout;
 public class DialerFragment extends Fragment {
 
     LinearLayout dialer;
-    ImageView image;
-
+    ImageView keypadHide;
+    FloatingActionButton keypadShow;
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState){
         View v = inflater.inflate(R.layout.dialer_fragment, container, false);
         dialer = (LinearLayout)v.findViewById(R.id.fragment);
-        image = (ImageView) v.findViewById(R.id.keypadHide);
+        keypadHide = (ImageView) v.findViewById(R.id.keypadHide);
 
-        final FloatingActionButton myFab = (FloatingActionButton) v.findViewById(R.id.keypadShow);
-        myFab.setOnClickListener(new View.OnClickListener() {
+         keypadShow = (FloatingActionButton) v.findViewById(R.id.keypadShow);
+        keypadShow.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vi) {
                 dialer.setVisibility(View.VISIBLE);
-                myFab.setVisibility(View.GONE);
-                image.setVisibility(View.VISIBLE);
+                keypadShow.setVisibility(View.GONE);
+                keypadHide.setVisibility(View.VISIBLE);
             }
         });
-        image.setOnClickListener(new View.OnClickListener() {
+        keypadHide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialer.setVisibility(View.GONE);
-                myFab.setVisibility(View.VISIBLE);
-                image.setVisibility(View.GONE);
+                keypadShow.setVisibility(View.VISIBLE);
+                keypadHide.setVisibility(View.GONE);
             }
         });
 
         return v;
     }
+
+
 }

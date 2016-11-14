@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -19,6 +20,7 @@ public class DialpadFragment extends Fragment {
     Context context;
     private static final String TAG = "MainActivity";
     DigitsEditText editText;
+    LinearLayout digitsContainer;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // load the layout
@@ -28,6 +30,7 @@ public class DialpadFragment extends Fragment {
         View v = inflater.inflate(R.layout.dialpad_fragment, container, false);
 
         editText = (DigitsEditText) v.findViewById(R.id.digits);
+        digitsContainer = (LinearLayout) v.findViewById(R.id.digits_container) ;
 
         DialpadKeyButton one = (DialpadKeyButton) v.findViewById(R.id.one);
         DialpadKeyButton two = (DialpadKeyButton) v.findViewById(R.id.two);
@@ -49,6 +52,8 @@ public class DialpadFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 editText.append("1");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
             }
         });
         one.setOnLongClickListener(new View.OnLongClickListener() {
@@ -62,54 +67,72 @@ public class DialpadFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 editText.append("2");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
             }
         });
         three.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editText.append("3");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
             }
         });
         four.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editText.append("4");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
             }
         });
         five.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editText.append("5");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
             }
         });
         six.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editText.append("6");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
             }
         });
         seven.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editText.append("7");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
             }
         });
         eight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editText.append("8");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
             }
         });
         nine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editText.append("9");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
             }
         });
         star.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editText.append("*");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
             }
         });
         zero.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +140,8 @@ public class DialpadFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG,"onCLick");
                 editText.append("0");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
             }
         });
         zero.setOnLongClickListener(new View.OnLongClickListener() {
@@ -124,6 +149,8 @@ public class DialpadFragment extends Fragment {
             public boolean onLongClick(View v) {
                 Log.d(TAG,"onLongCLick");
                 editText.append("+");
+                if(editText.toString().length()>0)
+                    digitsContainer.setVisibility(View.VISIBLE);
                 return true;
             }
         });
@@ -141,6 +168,8 @@ public class DialpadFragment extends Fragment {
                 if(size>0) {
                     editText.setText(text.substring(0, text.length() - 1));
                 }
+                if(size==1)
+                    digitsContainer.setVisibility(View.GONE);
             }
         });
         delete.setOnLongClickListener(new View.OnLongClickListener() {

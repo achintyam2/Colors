@@ -9,11 +9,12 @@
 
     <LinearLayout
         android:id="@+id/fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="gone">
 
         <fragment
+            android:id="@+id/f1"
             android:name="com.example.achintya.dialpaddialogfragment.DialpadFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,7 +26,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         >
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/keypadShow"
@@ -37,7 +37,7 @@
             android:visibility="visible"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:layout_marginBottom="@dimen/size25dp"
+            android:layout_marginBottom="@dimen/size32dp"
             />
         <ImageView
             android:id="@+id/keypadHide"
@@ -45,11 +45,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_dialpad_black_24dp"
-            android:layout_marginRight="@dimen/size60dp"
-            android:layout_marginTop="@dimen/size20dp"
+            android:layout_marginRight="@dimen/size65dp"
+            android:layout_marginBottom="@dimen/size30dp"
             android:layout_alignParentRight="true"
             />
 
-    </RelativeLayout>
 
+</RelativeLayout>
 </RelativeLayout>

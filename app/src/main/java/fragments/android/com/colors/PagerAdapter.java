@@ -2,7 +2,7 @@ package fragments.android.com.colors;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import contacts.android.socialmedia.FacebookIntegration;
 import contacts.android.socialmedia.GmailIntegration;
@@ -10,7 +10,7 @@ import contacts.android.socialmedia.GoogleIntegration;
 
 
 
-public class PagerAdapter extends FragmentPagerAdapter {
+public class PagerAdapter extends FragmentStatePagerAdapter {
 
     GmailIntegration tab2;
     private static final String TAG = "PagerAdapter";

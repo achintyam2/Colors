@@ -15,8 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
 import contacts.android.themeselector.ColorsDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements ColorsDialogFragment.DialogFragmentClickHandler {
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         setContentView(R.layout.activity_main);
 
         context = this;                  //Setting the context to this activity
+
+
 
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 //        myToolbar.setLogo(R.mipmap.ic_launcher);
@@ -172,8 +176,10 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
 
     @Override
     public void onBackPressed(){
-
-        super.onBackPressed();
+        pagerAdapter.getItem(position);
+            DialerFragment dialerFragment = (DialerFragment) viewPager.getAdapter().instantiateItem(viewPager,position);
+            dialerFragment.dialer.setVisibility(View.GONE);
+            dialerFragment.keypadShow.setVisibility(View.VISIBLE);
+            dialerFragment.keypadHide.setVisibility(View.GONE);
     }
-
 }
