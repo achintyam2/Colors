@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
                 window.setStatusBarColor(bg_color);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -176,10 +177,14 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
 
     @Override
     public void onBackPressed(){
-        pagerAdapter.getItem(position);
-            DialerFragment dialerFragment = (DialerFragment) viewPager.getAdapter().instantiateItem(viewPager,position);
+        if(position ==3) {
+            pagerAdapter.getItem(position);
+            DialerFragment dialerFragment = (DialerFragment) viewPager.getAdapter().instantiateItem(viewPager, position);
             dialerFragment.dialer.setVisibility(View.GONE);
             dialerFragment.keypadShow.setVisibility(View.VISIBLE);
             dialerFragment.keypadHide.setVisibility(View.GONE);
+        }
+        else
+            finish();
     }
 }
