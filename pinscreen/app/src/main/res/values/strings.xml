@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NewPinScreen</string>
+    <string name="ques1">Who is your favorite actor/actress, musician, or artist?</string>
+    <string name="ques2">What is the name of your favorite pet?</string>
+    <string name="ques3">In what city were you born?</string>
+
+</resources>

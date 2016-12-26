@@ -100,8 +100,6 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
         cancel.setOnClickListener(this);
         accept.setOnClickListener(this);
 
-
-
         return rootView;
     }
     @Override

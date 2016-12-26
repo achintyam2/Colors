@@ -21,8 +21,11 @@ import android.view.WindowManager;
 
 import contacts.android.themeselector.ColorsDialogFragment;
 
+
+
 public class MainActivity extends AppCompatActivity implements ColorsDialogFragment.DialogFragmentClickHandler {
 
+    DialerFragment dialerFragment;
     PagerAdapter pagerAdapter;
     int position;
     ViewPager viewPager;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
     TabLayout tabLayout;
     Context context;
     ActionBar actionBar;
+    private boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +43,10 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         setContentView(R.layout.activity_main);
 
         context = this;                  //Setting the context to this activity
-
-
-
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 //        myToolbar.setLogo(R.mipmap.ic_launcher);
         setSupportActionBar(myToolbar);                          //Designating a Toolbar as the action bar for an Activity
         actionBar = getSupportActionBar();                       //Retrieve an instance of ActionBar by calling getSupportActionBar()
-
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Facebook"));   //Adding the tab to the viewpager
         tabLayout.addTab(tabLayout.newTab().setText("Gmail"));      //Adding the tab to the viewpager
@@ -54,23 +54,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         tabLayout.addTab(tabLayout.newTab().setText("Dialer"));     //Adding the tab to the viewpager
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);            //Setting the gravity to use when laying out the tabs.
         tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary)); //Setting the background colour the the default tab
-
-        if(savedInstanceState != null)              //When the orientation changes retrieving back the saved instances
-        {
-
-
-            settingColor = savedInstanceState.getInt("color");
-            if(settingColor == 0)
-            {
-                tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            }
-            else {
-                setSupportActionBar(myToolbar);
-                actionBar = getSupportActionBar();
-                onDialogFragmentClicked(settingColor);              //Calling the method to set the colour to the actionBar
-            }
-        }
-
+        setStatusBarColor(R.color.colorPrimary);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount()); //Setting the viewpager through PagerAdapter accroding to the getTabCount() value
@@ -139,12 +123,10 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         return darkColor;
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
     }
-
     @Override
     public void onStop() {
         super.onStop();
@@ -163,17 +145,12 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
                 ColorsDialogFragment newFragment = ColorsDialogFragment.newInstance();
                 newFragment.show(ft, "title");
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
 
         }
     }
-    @Override
-    public void onSaveInstanceState(Bundle outState) {  //Saving the color value of the item to use it when orientation changes
-        super.onSaveInstanceState(outState);
-        outState.putInt("color", settingColor);
-    }
+
 
     @Override
     public void onBackPressed(){
@@ -183,6 +160,11 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
             dialerFragment.dialer.setVisibility(View.GONE);
             dialerFragment.keypadShow.setVisibility(View.VISIBLE);
             dialerFragment.keypadHide.setVisibility(View.GONE);
+            flag = true;
+        }
+        else if (flag)
+        {
+            finish();
         }
         else
             finish();

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ques1"
+        android:textColor="#000000"
+        android:fontFamily="serif"
+        android:textSize="15dp"/>
+
+    <EditText
+        android:id="@+id/answer1"
+        android:tag="one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="eg.salman,kareena etc."
+        android:fontFamily="serif"/>
+
+    <TextView
+        android:id="@+id/two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ques2"
+        android:textColor="#000000"
+        android:fontFamily="serif"
+        android:textSize="15dp"/>
+
+    <EditText
+        android:id="@+id/answer2"
+        android:tag="two"
+        android:hint="eg.tom,tuffy etc."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif"
+        />
+
+    <TextView
+        android:id="@+id/three"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ques3"
+        android:textColor="#000000"
+        android:fontFamily="serif"
+        android:textSize="15sp"/>
+
+    <EditText
+        android:id="@+id/answer3"
+        android:tag="three"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="eg.hyderabad,delhi etc."
+        android:fontFamily="serif"/>
+
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:text="Submit"/>
+
+</LinearLayout>

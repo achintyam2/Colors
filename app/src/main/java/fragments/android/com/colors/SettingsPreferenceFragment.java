@@ -3,6 +3,7 @@ package fragments.android.com.colors;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -69,8 +70,6 @@ public class SettingsPreferenceFragment extends PreferenceFragment {
         bindPreferenceSummaryToValue(findPreference("example_settings_text"));
         bindPreferenceSummaryToValue(findPreference("example_settings_list"));
     }
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

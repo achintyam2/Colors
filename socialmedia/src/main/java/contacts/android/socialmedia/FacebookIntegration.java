@@ -40,7 +40,7 @@ public class FacebookIntegration extends Fragment {
 
         fbButton = (LoginButton) v.findViewById(R.id.fb_button);
         fbButton.setReadPermissions("user_friends");                    //Setting the read permissions to request to the user
-        fbButton.setReadPermissions("email");
+        //fbButton.setReadPermissions("email");
         fbButton.setFragment(this);                                     //Setting the fragment
         fbButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {  //Registering a callback after the login button is pressed
             @Override

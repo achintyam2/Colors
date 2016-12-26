@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -21,6 +20,8 @@ public class DialpadFragment extends Fragment {
     private static final String TAG = "MainActivity";
     DigitsEditText editText;
     LinearLayout digitsContainer;
+
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // load the layout
@@ -180,9 +181,10 @@ public class DialpadFragment extends Fragment {
             }
         });
         calling.setOnClickListener(new View.OnClickListener() {
-            Intent my_callIntent = new Intent(Intent.ACTION_VIEW);
+
             @Override
             public void onClick(View v) {
+                Intent my_callIntent = new Intent(Intent.ACTION_DIAL);
                 String number = editText.getText().toString();
                 my_callIntent.setData(Uri.parse(number));
                 startActivity(my_callIntent);
@@ -190,4 +192,7 @@ public class DialpadFragment extends Fragment {
         });
         return v;
     }
+
+
+
 }

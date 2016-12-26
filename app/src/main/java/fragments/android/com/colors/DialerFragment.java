@@ -39,9 +39,6 @@ public class DialerFragment extends Fragment {
                 keypadHide.setVisibility(View.GONE);
             }
         });
-
         return v;
     }
-
-
 }
