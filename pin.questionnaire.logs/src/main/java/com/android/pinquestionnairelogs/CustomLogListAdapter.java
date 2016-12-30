@@ -1,14 +1,22 @@
 package com.android.pinquestionnairelogs;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -16,28 +24,35 @@ import java.util.Vector;
 public class CustomLogListAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
-    private String name = "name", date = "date", type = "type";
-    private Context context;
-    private String names, dates, types;
-    Vector<HashMap<String, Object>> callHistory ;
-    HashMap<String, Object> mTemp = new HashMap<String, Object>();
+    private final String nameKey = "name", dateKey = "date", callNumberKey = "number",timeKey = "time";
+    private String contactName,c;
+    private Vector<HashMap<String, Object>> callHistoryVector;
+    long currentTimeInMiliSecond;
+    private HashMap<String, Object> mapFromCallHistory;
+    private HashMap<String, ArrayList<String>> mapFromCallTypePerDay;
+    Context context;
+    HashMap<String,ArrayList<Long>> contactsPerDayCall;
 
-    public  CustomLogListAdapter(MainActivity1 mainActivity1,Vector<HashMap<String, Object>> mCallHistory)
-    {
+
+    public CustomLogListAdapter(MainActivity1 mainActivity1,
+                                Vector<HashMap<String, Object>> callLogs,
+                                HashMap<String,ArrayList<String>> readCallTypePerDay) {
         context = mainActivity1;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        callHistory = mCallHistory;
-
+        callHistoryVector = callLogs;
+        mapFromCallTypePerDay = readCallTypePerDay;
+        currentTimeInMiliSecond = System.currentTimeMillis();
+        contactsPerDayCall = new HashMap<>();
     }
 
     @Override
     public int getCount() {
-        return callHistory.size();
+        return callHistoryVector.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return callHistory.get(position);
+        return callHistoryVector.get(position);
     }
 
     @Override
@@ -45,9 +60,11 @@ public class CustomLogListAdapter extends BaseAdapter {
         return 0;
     }
 
-    private class  Holder
-    {
-        TextView contactName, callDate,callType;
+    private class Holder {
+        TextView contactName, callDate, callMade, callReceived, callMissed;
+        int called = 0, received = 0, missed = 0;
+        ImageView callImage, receivedImage, missedImage, menu;
+
     }
 
     @Override
@@ -56,32 +73,86 @@ public class CustomLogListAdapter extends BaseAdapter {
         Holder holder = new Holder();
         View view = inflater.inflate(R.layout.call_log_single_row, null);
 
-        RelativeLayout  r1 = (RelativeLayout) view.findViewById(R.id.r1);
-        RelativeLayout  r2 = (RelativeLayout) view.findViewById(R.id.r2);
+        mapFromCallHistory = callHistoryVector.get(position);
 
-        mTemp = callHistory.get(position);
-        names = (String) mTemp.get(name);
-        dates = (String) mTemp.get(date);
-        types = (String) mTemp.get(type);
+        contactName = (String) mapFromCallHistory.get(nameKey);
+
+        //long seconds = (long) mapFromCallHistory.get(timeKey);
+
+        ArrayList<String> values = mapFromCallTypePerDay.get(contactName);
+        String contact_date = (String) mapFromCallHistory.get(dateKey);
+
+        /*long day = ((currentTimeInMiliSecond - seconds) / 86400000);
+
+        ArrayList<Long> contactTime = contactsPerDayCall.get(contactName + "_day" + day);
+        //countTimeStamps += 1;
+        if (contactTime == null)
+            contactTime = new ArrayList<>();
+        contactTime.add(seconds);
+        contactsPerDayCall.put(contactName + "_day" + day, contactTime);*/
+
+
+        holder.called = 0;
+        holder.received = 0;
+        holder.missed = 0;
+
+        for (int i = 0; i < values.size(); i++) {
+            if ("Outgoing".equals(values.get(i)))
+                holder.called += 1;
+            else if ("Incoming".equals(values.get(i)))
+                holder.received += 1;
+            else if ("Missed".equals(values.get(i)))
+                holder.missed += 1;
+        }
 
         holder.contactName = (TextView) view.findViewById(R.id.contact_name);
         holder.callDate = (TextView) view.findViewById(R.id.call_date);
-        holder.callType = (TextView) view.findViewById(R.id.call_type);
+        holder.callMade = (TextView) view.findViewById(R.id.call_made);
+        holder.callReceived = (TextView) view.findViewById(R.id.call_received);
+        holder.callMissed = (TextView) view.findViewById(R.id.call_missed);
+        holder.callImage = (ImageView) view.findViewById(R.id.outgoing);
+        holder.receivedImage = (ImageView) view.findViewById(R.id.incoming);
+        holder.missedImage = (ImageView) view.findViewById(R.id.missed);
+        holder.menu = (ImageView) view.findViewById(R.id.menu);
 
-        holder.contactName.setText(names);
-        holder.callDate.setText(dates);
-        holder.callType.setText(types);
+        holder.contactName.setText(contactName);
+        holder.callDate.setText(contact_date);
 
-        r1.setOnClickListener(new View.OnClickListener() {
+        if (holder.called != 0) {
+            holder.callMade.setText("(" + holder.called + ")");
+            holder.callImage.setImageResource(R.drawable.ic_call_made_green_24dp);
+        }
+        if (holder.received != 0) {
+            holder.callReceived.setText("(" + holder.received + ")");
+            holder.receivedImage.setImageResource(R.drawable.ic_call_received_green_24dp);
+        }
+        if (holder.missed != 0) {
+            holder.callMissed.setText("(" + holder.missed + ")");
+            holder.missedImage.setImageResource(R.drawable.ic_call_missed_red_24dp);
+        }
+        if (holder.called == 0 && holder.received == 0 && holder.missed == 0)
+            holder.callImage.setImageResource(R.drawable.ic_cancelled_red_24dp);
+
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mapFromCallHistory = callHistoryVector.get(position);
+                String number = (String) mapFromCallHistory.get(callNumberKey);
+                Log.d("aa", "Number " + number);
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + number));
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                context.startActivity(intent);
             }
         });
-        r2.setOnClickListener(new View.OnClickListener() {
+        holder.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = ((Activity)context).getFragmentManager();
-                LogsDialogFragment logsDialogFragment = new LogsDialogFragment();
+                new LogsDialogFragment();
+                LogsDialogFragment logsDialogFragment = LogsDialogFragment.newInstance();
                 logsDialogFragment.show(fragmentManager,"mm");
             }
         });
