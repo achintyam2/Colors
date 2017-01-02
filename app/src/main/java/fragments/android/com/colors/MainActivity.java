@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         setSupportActionBar(myToolbar);                          //Designating a Toolbar as the action bar for an Activity
         actionBar = getSupportActionBar();                       //Retrieve an instance of ActionBar by calling getSupportActionBar()
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText("Call Logs"));   //Adding the tab to the viewpager
         tabLayout.addTab(tabLayout.newTab().setText("Facebook"));   //Adding the tab to the viewpager
         tabLayout.addTab(tabLayout.newTab().setText("Gmail"));      //Adding the tab to the viewpager
         tabLayout.addTab(tabLayout.newTab().setText("Google"));     //Adding the tab to the viewpager
@@ -154,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
 
     @Override
     public void onBackPressed(){
-        if(position ==3) {
+        if(position ==4) {
             pagerAdapter.getItem(position);
             DialerFragment dialerFragment = (DialerFragment) viewPager.getAdapter().instantiateItem(viewPager, position);
             dialerFragment.dialer.setVisibility(View.GONE);

@@ -1,1 +1,1 @@
-include ':app', ':socialmedia', ':themeselector', ':dialpaddialogfragment', ':pin.questionnaire.logs'
+include ':app', ':socialmedia', ':themeselector', ':dialpaddialogfragment', ':pin.questionnaire.logs', ':calllogs'

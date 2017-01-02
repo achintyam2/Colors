@@ -24,8 +24,7 @@ public class DialpadFragment extends Fragment {
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // load the layout
-        //setContentView(R.layout.dialpad_fragment);
+
         context = this.getActivity();
 
         View v = inflater.inflate(R.layout.dialpad_fragment, container, false);

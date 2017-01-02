@@ -23,7 +23,6 @@ public class ColorsDialogFragment extends DialogFragment implements View.OnClick
     private DialogFragmentClickHandler caller;
     Button cancel,accept;
     SparseArray<Integer> colors = new SparseArray<>();
-    Boolean flag = true;
     DialogFragmentClickHandler call;
 
     public ColorsDialogFragment(){}
