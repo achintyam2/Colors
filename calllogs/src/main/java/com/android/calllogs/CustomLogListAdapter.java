@@ -7,7 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -36,12 +40,13 @@ public class CustomLogListAdapter extends BaseAdapter {
     Context context;
     HashMap<String,ArrayList<Long>> contactsPerDayCall;
     Calendar c;
+    Intent intent;
 
 
-    public CustomLogListAdapter(CallLogsFragment mainActivity1,
+    public CustomLogListAdapter(CallLogsFragment callLogsFragment,
                                 Vector<HashMap<String, Object>> callLogs,
                                 HashMap<String,ArrayList<String>> readCallTypePerDay) {
-        context = mainActivity1.getContext();
+        context = callLogsFragment.getContext();
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         callHistoryVector = callLogs;
         mapFromCallTypePerDay = readCallTypePerDay;
@@ -135,12 +140,17 @@ public class CustomLogListAdapter extends BaseAdapter {
                 mapFromCallHistory = callHistoryVector.get(position);
                 String number = (String) mapFromCallHistory.get(callNumberKey);
                 Log.d("aa", "Number " + number);
-                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent = new Intent(Intent.ACTION_CALL);
                 intent.setData(Uri.parse("tel:" + number));
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                if(isCallingAllowed())
+                {
+                    //If permission is already having then showing the toast
+                    //Toast.makeText(getActivity(),"You already have the permission",Toast.LENGTH_LONG).show();
+                    //Existing the method with return
+                    context.startActivity(intent);
                     return;
                 }
-                context.startActivity(intent);
+                requestCallPermission();
             }
         });
         holder.menu.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +182,7 @@ public class CustomLogListAdapter extends BaseAdapter {
 
         if (day.equals(currentDay))
         {
-            SimpleDateFormat formatter = new SimpleDateFormat("h:m a");
+            SimpleDateFormat formatter = new SimpleDateFormat("h:mm a");
             dateString = formatter.format(new Date(time));
         }
         else if (currentDays!=previousDay)
@@ -193,5 +203,33 @@ public class CustomLogListAdapter extends BaseAdapter {
             dateString = formatter.format(new Date(time));
         }
         return dateString;
+    }
+
+    private boolean isCallingAllowed()
+    {
+        int result = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
+        if (result == PackageManager.PERMISSION_GRANTED)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private  void requestCallPermission()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE},1);
+
+    }
+
+    private void requestPermissions(String[] strings, int requestCode) {
+        if (requestCode == 1) {
+            if ((strings.length > 0) && (strings[0].equals(Integer.toString(PackageManager.PERMISSION_GRANTED)))) {
+                context.startActivity(intent);
+            } else {
+                Toast.makeText(context, "Oops you just denied the permission", Toast.LENGTH_LONG).show();
+            }
+        }
+
     }
 }

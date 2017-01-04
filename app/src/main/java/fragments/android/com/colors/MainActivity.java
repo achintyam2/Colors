@@ -20,10 +20,12 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import contacts.android.themeselector.ColorsDialogFragment;
+import com.example.achintya.dialpaddialogfragment.*;
 
 
 
-public class MainActivity extends AppCompatActivity implements ColorsDialogFragment.DialogFragmentClickHandler {
+
+    public class MainActivity extends AppCompatActivity implements ColorsDialogFragment.DialogFragmentClickHandler {
 
     DialerFragment dialerFragment;
     PagerAdapter pagerAdapter;
@@ -48,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements ColorsDialogFragm
         setSupportActionBar(myToolbar);                          //Designating a Toolbar as the action bar for an Activity
         actionBar = getSupportActionBar();                       //Retrieve an instance of ActionBar by calling getSupportActionBar()
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Call Logs"));   //Adding the tab to the viewpager
+        tabLayout.addTab(tabLayout.newTab().setText("SMS"));   //Adding the tab to the viewpager
+        tabLayout.addTab(tabLayout.newTab().setText("Calls"));   //Adding the tab to the viewpager
         tabLayout.addTab(tabLayout.newTab().setText("Facebook"));   //Adding the tab to the viewpager
         tabLayout.addTab(tabLayout.newTab().setText("Gmail"));      //Adding the tab to the viewpager
         tabLayout.addTab(tabLayout.newTab().setText("Google"));     //Adding the tab to the viewpager

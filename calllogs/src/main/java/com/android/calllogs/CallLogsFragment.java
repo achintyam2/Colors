@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.CallLog;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,22 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
-
 import static android.provider.CallLog.Calls.CONTENT_URI;
 
-/**
- * Created by Achintya on 02-01-2017.
- */
 
 public class CallLogsFragment extends Fragment {
 
-    ListView listView;
+    ListView callLogsList;
     private final String nameKey = "name", dateKey = "date", typeKey = "type", timeKey = "time", callNumberKey = "number";
     Vector<HashMap<String, Object>> vectorCallHistory;
     HashMap<Object, Object> readTimeAndCallType;
@@ -46,7 +40,7 @@ public class CallLogsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.activity_main1,container,false);
-        listView = (ListView) view.findViewById(R.id.logs_list);
+        callLogsList = (ListView) view.findViewById(R.id.logs_list);
         vectorCallHistory = new Vector<>();
         readTimeAndCallType = new HashMap<>();
         nameAndTimeMap = new HashMap<>();
@@ -150,7 +144,7 @@ public class CallLogsFragment extends Fragment {
         } while (c.moveToNext());
 
         final CustomLogListAdapter adapter = new CustomLogListAdapter(this, vectorCallHistory, callTypePerDay);
-        listView.setAdapter(adapter);
+        callLogsList.setAdapter(adapter);
         Log.d("Check  ", "VectorCalHistory" + vectorCallHistory);
         Log.d("Check  ", "SingleTimeAndCallType" + readTimeAndCallType);
         Log.d("Check  ", "ContactsPerDayCall " + contactsPerDayCall);

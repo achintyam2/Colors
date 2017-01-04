@@ -1,10 +1,15 @@
 package com.example.achintya.dialpaddialogfragment;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +25,8 @@ public class DialpadFragment extends Fragment {
     private static final String TAG = "MainActivity";
     DigitsEditText editText;
     LinearLayout digitsContainer;
-
+    Intent my_callIntent;
+    final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -183,15 +189,67 @@ public class DialpadFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Intent my_callIntent = new Intent(Intent.ACTION_DIAL);
+                my_callIntent = new Intent(Intent.ACTION_CALL);
                 String number = editText.getText().toString();
-                my_callIntent.setData(Uri.parse(number));
-                startActivity(my_callIntent);
+                my_callIntent.setData(Uri.parse("tel:"+number));
+                if(isCallingAllowed())
+                {
+                    //If permission is already having then showing the toast
+                    //Toast.makeText(getActivity(),"You already have the permission",Toast.LENGTH_LONG).show();
+                    //Existing the method with return
+                    startActivity(my_callIntent);
+                    return;
+                }
+                requestCallPermission();
+
             }
         });
         return v;
     }
 
+    private boolean isCallingAllowed()
+    {
+        //Getting the permission status
+        int result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE);
+
+        //If permission is granted returning true
+        if (result == PackageManager.PERMISSION_GRANTED)
+        {
+            startActivity(my_callIntent);
+            return true;
+        }
+
+        //If permission is not granted returning false
+        return false;
+    }
+
+
+    private  void requestCallPermission()
+    {
+        //And finally ask for the permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE},MY_PERMISSIONS_REQUEST_CALL_PHONE);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        //Checking the request code of our request
+        if(requestCode == MY_PERMISSIONS_REQUEST_CALL_PHONE){
+
+            //If permission is granted
+            if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+                Toast.makeText(context,"Permission granted now you can call.",Toast.LENGTH_LONG).show();
+                //startActivity(my_callIntent);
+
+            }else{
+                //Displaying another toast if permission is not granted
+                Toast.makeText(context,"Oops you just denied the permission",Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
 
 }
