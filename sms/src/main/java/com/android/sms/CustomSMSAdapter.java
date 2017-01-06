@@ -26,6 +26,7 @@ public class CustomSMSAdapter extends BaseAdapter {
     Calendar c;
     HashMap<String,ArrayList<String>> nameAndBodyList;
     HashMap<String,ArrayList<Long>> nameAndTimeList;
+    HashMap<String,ArrayList<Integer>> nameAndTypeList;
     ArrayList<String> bodies;
     long seconds;
 
@@ -33,14 +34,16 @@ public class CustomSMSAdapter extends BaseAdapter {
     public CustomSMSAdapter(SMSInboxFragment smsInboxFragment,
                             Vector<HashMap<String, Object>> receivedSMSVector,
                             HashMap<String,ArrayList<String>> nameAndBody,
-                            HashMap<String,ArrayList<Long>> nameAndTime) {
+                            HashMap<String,ArrayList<Long>> nameAndTime,
+                            HashMap<String,ArrayList<Integer>> nameAndType) {
         context = smsInboxFragment.getContext();
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         smsListVector = receivedSMSVector;
         c = Calendar.getInstance();
         nameAndBodyList = nameAndBody;
         nameAndTimeList = nameAndTime;
-
+        nameAndTypeList = nameAndType;
+        mapFromSMSVector = new HashMap<>();
         bodies = new ArrayList<>();
     }
 
@@ -69,45 +72,49 @@ public class CustomSMSAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         Holder holder = new Holder();
-        View view = inflater.inflate(R.layout.sms_single_row, null);
-
-        holder.contactName = (TextView) view.findViewById(R.id.contact_name);
-        holder.smsDate = (TextView) view.findViewById(R.id.sms_date);
-        holder.smsBody = (TextView) view.findViewById(R.id.sms_body);
-        holder.contactID = (TextView) view.findViewById(R.id.contactID);
-
-        mapFromSMSVector = smsListVector.get(position);
-        contactName = (String) mapFromSMSVector.get("address");
-
-        bodies = nameAndBodyList.get(contactName);
-
-        contactID = contactName.toUpperCase().substring(0, 1);
-        holder.contactName.setText(contactName);
-        holder.contactID.setText(contactID + "");
-
-        smsBody = (String) mapFromSMSVector.get("body");
-        holder.smsBody.setText(bodies.get(0));
-
-        seconds = (long) mapFromSMSVector.get("date");
-        date = getDateTime(seconds);
-        holder.smsDate.setText(date);
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mapFromSMSVector = smsListVector.get(position);
-                contactName = (String) mapFromSMSVector.get("address");
-                Intent intent = new Intent(context,OpenInbox.class);
-                intent.putExtra("name",contactName);
-                intent.putExtra("nameAndBody",nameAndBodyList);
-                intent.putExtra("nameAndTime",nameAndTimeList);
-                context.startActivity(intent);
+        if (convertView==null)
+            convertView = inflater.inflate(R.layout.sms_single_row, null);
 
 
-            }
-        });
+            holder.contactName = (TextView) convertView.findViewById(R.id.contact_name);
+            holder.smsDate = (TextView) convertView.findViewById(R.id.sms_date);
+            holder.smsBody = (TextView) convertView.findViewById(R.id.sms_body);
+            holder.contactID = (TextView) convertView.findViewById(R.id.contactID);
 
-        return view;
+            mapFromSMSVector = smsListVector.get(position);
+            contactName = (String) mapFromSMSVector.get("address");
+
+            bodies = nameAndBodyList.get(contactName);
+
+            if (contactName == null)
+                contactID = "3";
+            else
+                contactID = contactName.toUpperCase().substring(0, 1);
+            holder.contactName.setText(contactName);
+            holder.contactID.setText(contactID + "");
+
+            smsBody = (String) mapFromSMSVector.get("body");
+            holder.smsBody.setText(bodies.get(0));
+
+            seconds = (long) mapFromSMSVector.get("date");
+            date = getDateTime(seconds);
+            holder.smsDate.setText(date);
+
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mapFromSMSVector = smsListVector.get(position);
+                    contactName = (String) mapFromSMSVector.get("address");
+                    Intent intent = new Intent(context, OpenInbox.class);
+                    intent.putExtra("name", contactName);
+                    intent.putExtra("nameAndBody", nameAndBodyList);
+                    intent.putExtra("nameAndTime", nameAndTimeList);
+                    intent.putExtra("nameAndType", nameAndTypeList);
+                    context.startActivity(intent);
+                }
+            });
+
+        return convertView;
     }
 
     private String getDateTime(long time) {

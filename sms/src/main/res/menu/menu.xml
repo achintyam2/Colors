@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:Colors="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/call"
+        android:title="Call"
+        Colors:showAsAction="always"
+        android:icon="@drawable/ic_phone_black_24dp"/>
+    <item
+        android:id="@+id/block"
+        android:title="Block"
+        Colors:showAsAction="ifRoom"
+        android:icon="@drawable/ic_block_white_24dp"/>
+
+    <item
+        android:id="@+id/add_attachment"
+        android:title="Add Attachment"
+        android:showAsAction="never"/>
+
+    <item
+        android:id="@+id/add_to_contacts"
+        android:title="Add to contacts"
+        android:showAsAction="never"/>
+    <item
+        android:id="@+id/delete_thread"
+        android:title="Delete Thread"
+        android:showAsAction="never"/>
+</menu>
