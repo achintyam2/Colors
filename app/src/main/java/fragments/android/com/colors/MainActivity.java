@@ -2,6 +2,9 @@ package fragments.android.com.colors;
 
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -12,22 +15,23 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
+
+import java.security.MessageDigest;
 
 import contacts.android.themeselector.ColorsDialogFragment;
-import com.example.achintya.dialpaddialogfragment.*;
-
 
 
 
     public class MainActivity extends AppCompatActivity implements ColorsDialogFragment.DialogFragmentClickHandler {
 
-    DialerFragment dialerFragment;
     PagerAdapter pagerAdapter;
     int position;
     ViewPager viewPager;
@@ -44,6 +48,19 @@ import com.example.achintya.dialpaddialogfragment.*;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        /*try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("MY KEY HASH:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (Exception e) {
+
+        }*/
+
+
         context = this;                  //Setting the context to this activity
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 //        myToolbar.setLogo(R.mipmap.ic_launcher);
@@ -56,6 +73,7 @@ import com.example.achintya.dialpaddialogfragment.*;
         tabLayout.addTab(tabLayout.newTab().setText("Gmail"));      //Adding the tab to the viewpager
         tabLayout.addTab(tabLayout.newTab().setText("Google"));     //Adding the tab to the viewpager
         tabLayout.addTab(tabLayout.newTab().setText("Dialer"));     //Adding the tab to the viewpager
+        tabLayout.addTab(tabLayout.newTab().setText("MMS"));     //Adding the tab to the viewpager
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);            //Setting the gravity to use when laying out the tabs.
         tabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary)); //Setting the background colour the the default tab
         setStatusBarColor(R.color.colorPrimary);
@@ -72,10 +90,13 @@ import com.example.achintya.dialpaddialogfragment.*;
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
                 position = tab.getPosition();
+                Log.d(TAG,"position "+position);
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                // Toast.makeText(context, "Unselected",Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Unselected",Toast.LENGTH_LONG).show();
+                int previousPosition = tab.getPosition();
+
             }
 
             @Override
@@ -158,7 +179,7 @@ import com.example.achintya.dialpaddialogfragment.*;
 
     @Override
     public void onBackPressed(){
-        if(position ==4) {
+        if(position ==5) {
             pagerAdapter.getItem(position);
             DialerFragment dialerFragment = (DialerFragment) viewPager.getAdapter().instantiateItem(viewPager, position);
             dialerFragment.dialer.setVisibility(View.GONE);

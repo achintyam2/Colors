@@ -1,7 +1,7 @@
 package com.example.achintya.dialpaddialogfragment;
 
 import android.Manifest;
-import android.app.Fragment;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -215,10 +216,8 @@ public class DialpadFragment extends Fragment {
         //If permission is granted returning true
         if (result == PackageManager.PERMISSION_GRANTED)
         {
-            startActivity(my_callIntent);
             return true;
         }
-
         //If permission is not granted returning false
         return false;
     }
@@ -242,7 +241,7 @@ public class DialpadFragment extends Fragment {
             if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
 
                 Toast.makeText(context,"Permission granted now you can call.",Toast.LENGTH_LONG).show();
-                //startActivity(my_callIntent);
+                startActivity(my_callIntent);
 
             }else{
                 //Displaying another toast if permission is not granted

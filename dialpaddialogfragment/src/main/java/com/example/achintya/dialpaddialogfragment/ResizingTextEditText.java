@@ -18,6 +18,7 @@ package com.example.achintya.dialpaddialogfragment;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
@@ -41,12 +42,14 @@ public class ResizingTextEditText extends EditText {
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         ViewUtil.resizeText(this, mOriginalTextSize, mMinTextSize);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         ViewUtil.resizeText(this, mOriginalTextSize, mMinTextSize);
     }
 }

@@ -1,20 +1,22 @@
 package fragments.android.com.colors;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 
 
 public class DialerFragment extends Fragment {
 
     LinearLayout dialer;
     ImageView keypadHide;
-    FloatingActionButton keypadShow;
+    ImageButton keypadShow;
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle
@@ -23,7 +25,7 @@ public class DialerFragment extends Fragment {
         dialer = (LinearLayout)v.findViewById(R.id.fragment);
         keypadHide = (ImageView) v.findViewById(R.id.keypadHide);
 
-         keypadShow = (FloatingActionButton) v.findViewById(R.id.keypadShow);
+         keypadShow = (ImageButton) v.findViewById(R.id.keypadShow);
         keypadShow.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vi) {
                 dialer.setVisibility(View.VISIBLE);

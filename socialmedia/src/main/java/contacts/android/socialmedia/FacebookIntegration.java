@@ -22,6 +22,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class FacebookIntegration extends Fragment {
 
@@ -51,16 +52,18 @@ public class FacebookIntegration extends Fragment {
                 FacebookSdk.addLoggingBehavior(LoggingBehavior.REQUESTS);
 
                 //TODO Retrieving Complete FriendList of the user
-                GraphRequest request = GraphRequest.newGraphPathRequest(    //Creating a new request
+                /*GraphRequest request = GraphRequest.newGraphPathRequest(    //Creating a new request
                         AccessToken.getCurrentAccessToken(),
                         "/me/friends/",
                         new GraphRequest.Callback() {
                             @Override
                             public void onCompleted(GraphResponse response) {
                                 try {
+                                    Intent intent = new Intent(context, FriendsList.class);
                                     JSONArray rawName = response.getJSONObject().getJSONArray("data");
                                     Log.d(TAG,"List : "+"\n"+rawName);
-
+                                    intent.putExtra("jsondata", rawName.toString());
+                                    startActivity(intent);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -69,7 +72,7 @@ public class FacebookIntegration extends Fragment {
                 Bundle parameters = new Bundle();                      //Creating a bundle
                 parameters.putString("fields", "name");                //Setting parameters to the bundle
                 request.setParameters(parameters);                     //Setting parameters to the particular request
-                request.executeAsync();
+                request.executeAsync();*/
 
             /*GraphRequest request = GraphRequest.newMyFriendsRequest(
 
@@ -94,6 +97,30 @@ public class FacebookIntegration extends Fragment {
             parameters.putString("fields", "name,picture");
             request.setParameters(parameters);
             request.executeAsync();*/
+
+
+                GraphRequest request = GraphRequest.newMeRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                // Insert your code here
+                                Intent intent = new Intent(context, FriendsList.class);
+                                try {
+                                    JSONArray rawName = response.getJSONObject().getJSONObject("friends").getJSONArray("data");
+                                    intent.putExtra("jsondata", rawName.toString());
+                                    startActivity(intent);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "friends");
+                request.setParameters(parameters);
+                request.executeAsync();
+
             }
 
             @Override

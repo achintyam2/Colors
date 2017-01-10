@@ -19,6 +19,8 @@ package com.example.achintya.dialpaddialogfragment;
 import android.content.res.Resources;
 import android.graphics.Outline;
 import android.graphics.Paint;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,7 @@ import android.widget.TextView;
 /**
  * Provides static functions to work with views
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class ViewUtil {
     private ViewUtil() {}
 

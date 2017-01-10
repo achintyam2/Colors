@@ -18,6 +18,7 @@ package com.example.achintya.dialpaddialogfragment;
 
 import android.content.Context;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -147,6 +148,7 @@ public class DialpadKeyButton extends FrameLayout {
                                 @Override
                                 public void run() {
                                     setLongHovered(true);
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
                                     announceForAccessibility(mLongHoverContentDesc);
                                 }
                             };

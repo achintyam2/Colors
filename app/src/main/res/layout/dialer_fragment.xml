@@ -15,7 +15,7 @@
 
         <fragment
             android:id="@+id/f1"
-            android:name="com.example.achintya.dialpaddialogfragment.DialpadFragment"
+            android:name="com.android.dialpad.DialpadFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:layout="@layout/dialpad_fragment"/>
@@ -27,13 +27,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         >
-        <android.support.design.widget.FloatingActionButton
+        <ImageButton
             android:id="@+id/keypadShow"
+            android:background="@drawable/round"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:src="@drawable/ic_dialpad_black_24dp"
-            app:fabSize="normal"
             android:visibility="visible"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"

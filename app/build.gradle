@@ -41,9 +41,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(path: ':socialmedia')
     compile project(path: ':themeselector')
-    compile project(path: ':dialpaddialogfragment')
+    compile project(path: ':dialpad')
     compile project(path: ':calllogs')
 
     compile 'com.melnykov:floatingactionbutton:1.3.0'
     compile project(path: ':sms')
+    compile project(path: ':mms')
 }

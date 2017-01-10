@@ -18,6 +18,8 @@ package com.example.achintya.dialpaddialogfragment;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -27,6 +29,7 @@ import android.view.inputmethod.InputMethodManager;
 /**
  * EditText which suppresses IME show up.
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class DigitsEditText extends ResizingTextEditText {
 
     public DigitsEditText(Context context, AttributeSet attrs) {

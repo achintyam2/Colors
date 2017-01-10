@@ -7,16 +7,16 @@ import android.util.Log;
 
 import com.android.calllogs.CallLogsFragment;
 import com.android.sms.SMSInboxFragment;
-
+import com.android.mms.MMSInboxFragment;
 import contacts.android.socialmedia.FacebookIntegration;
 import contacts.android.socialmedia.GmailIntegration;
 import contacts.android.socialmedia.GoogleIntegration;
-
+import com.android.dialpad.DialpadFragment;
 
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
-    GmailIntegration tab3;
+
     private static final String TAG = "PagerAdapter";
     int mNumTabs;
 
@@ -38,9 +38,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         case 2:
             FacebookIntegration tab2 = new FacebookIntegration();
             return tab2;
+
         case 3:
-            if (tab3 == null)
-                tab3 = new GmailIntegration();
+            GmailIntegration   tab3 = new GmailIntegration();
             return tab3;
         case 4:
             GoogleIntegration tab4 = new GoogleIntegration();
@@ -48,6 +48,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         case 5:
             DialerFragment tab5 = new DialerFragment();
             return tab5;
+        case 6:
+            MMSInboxFragment tab6 = new MMSInboxFragment();
+            return tab6;
         default:
             return null;
     }

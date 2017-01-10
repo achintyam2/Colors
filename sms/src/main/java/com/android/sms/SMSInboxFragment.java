@@ -3,8 +3,10 @@ package com.android.sms;
 
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.os.CancellationSignal;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +23,6 @@ public class SMSInboxFragment extends Fragment {
 
     ListView smsList;
     Vector<HashMap<String, Object>> vectorSMSList;
-
     Button getSMSList;
     HashMap<String,ArrayList<String>> nameAndBodyList;
     HashMap<String,ArrayList<Long>> nameAndTimeList;
@@ -54,10 +55,9 @@ public class SMSInboxFragment extends Fragment {
 
     public void fetchInbox()
     {
-        Uri uriSms = Uri.parse("content://sms/");
-        Cursor cursor = getContext().getContentResolver().query(uriSms, new String[]{"address", "date", "body","type"},
-                                                                null,null,"date DESC");
-
+        Uri uriSms = Uri.parse("content://sms");
+        String[] projection = {"address", "date", "body","type"};
+        Cursor cursor = getContext().getContentResolver().query(uriSms,projection, null,null,"date DESC");
         cursor.moveToFirst();
 
         do {

@@ -9,6 +9,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.style.TtsSpan;
@@ -31,6 +32,7 @@ import java.util.Locale;
 /**
  * View that displays a twelve-key phone dialpad.
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class DialpadView extends LinearLayout {
     private static final String TAG = DialpadView.class.getSimpleName();
 
@@ -50,7 +52,7 @@ public class DialpadView extends LinearLayout {
     private EditText mDigits;
     private ImageButton mDelete;
     private View mOverflowMenuButton;
-    private ColorStateList mRippleColor;
+    //private ColorStateList mRippleColor;
 
     private ViewGroup mRateContainer;
     private TextView mIldCountry;
@@ -79,7 +81,7 @@ public class DialpadView extends LinearLayout {
         super(context, attrs, defStyle);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Dialpad);
-        mRippleColor = a.getColorStateList(R.styleable.Dialpad_dialpad_key_button_touch_tint);
+        //mRippleColor = a.getColorStateList(R.styleable.Dialpad_dialpad_key_button_touch_tint);
         a.recycle();
 
         mTranslateDistance = getResources().getDimensionPixelSize(
@@ -94,7 +96,7 @@ public class DialpadView extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         setupKeypad();
-        mDigits = null;// (EditText) findViewById(R.id.digits);
+        mDigits = (EditText) findViewById(R.id.digits);
         mDelete = (ImageButton) findViewById(R.id.deleteButton);
         mOverflowMenuButton = findViewById(R.id.dialpad_overflow);
         mRateContainer = (ViewGroup) findViewById(R.id.rate_container);
@@ -108,6 +110,7 @@ public class DialpadView extends LinearLayout {
             mDigits.setSelected(true);
         }
     }
+
 
     private void setupKeypad() {
         final int[] letterIds = new int[] {
@@ -170,16 +173,16 @@ public class DialpadView extends LinearLayout {
                 numberContentDescription = spannable;
             }
 
-            final RippleDrawable rippleBackground = (RippleDrawable)
-                    getDrawableCompat(getContext(), R.drawable.btn_dialpad_key);
-            if (mRippleColor != null) {
+            /*final RippleDrawable rippleBackground = (RippleDrawable)
+                    getDrawableCompat(getContext(), R.drawable.btn_dialpad_key);*/
+            /*if (mRippleColor != null) {
                 rippleBackground.setColor(mRippleColor);
-            }
+            }*/
 
             numberView.setText(numberString);
             numberView.setElegantTextHeight(false);
             dialpadKey.setContentDescription(numberContentDescription);
-            dialpadKey.setBackground(rippleBackground);
+            //dialpadKey.setBackground(rippleBackground);
 
             if (lettersView != null) {
                 lettersView.setText(resources.getString(letterIds[i]));
@@ -196,13 +199,13 @@ public class DialpadView extends LinearLayout {
 
     }
 
-    private Drawable getDrawableCompat(Context context, int id) {
+    /*private Drawable getDrawableCompat(Context context, int id) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return context.getDrawable(id);
         } else {
             return context.getResources().getDrawable(id);
         }
-    }
+    }*/
 
     public void setShowVoicemailButton(boolean show) {
         View view = findViewById(R.id.dialpad_key_voicemail);
