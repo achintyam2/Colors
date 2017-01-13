@@ -69,8 +69,7 @@ public class Inbox extends AppCompatActivity {
 
 
         Uri mUri = Uri.parse("content://mms-sms/conversations/" + thread_id);
-//        String[] projection1 = new String[]{"tid","type", "_id", "address", "date", "body", "text_only","error_code","ct_t","msg_box","v","sub","rr","status","retr_txt_cs","ct_l","ct_cls","m_size","exp","sub_cs","st","person","tr_id","read","pri","read_status","d_rept","resp_txt","rpt_a","retr_st","m_cls","service_center"};
-        String[] projection1 = new String[]{"type", "_id", "address", "date", "body", "text_only","ct_t","date_sent"};
+        String[] projection1 = new String[]{"type", "_id", "date", "body","ct_t","date_sent"};
         Cursor cursor = getContentResolver().query(mUri, projection1, null, null, "date ASC");
         cursor.moveToFirst();
 

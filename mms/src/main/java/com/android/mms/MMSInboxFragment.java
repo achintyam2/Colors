@@ -51,8 +51,7 @@ public class MMSInboxFragment extends Fragment {
     private void read() {
 
         Uri uri = Uri.parse("content://mms-sms/conversations/");
-//        final String[] projection = new String[]{"_id","address", "date", "body", "type", "thread_id"};
-        final String[] projection = new String[]{"*"};
+        final String[] projection = new String[]{"_id","address", "date", "body",  "thread_id"};
         Cursor mainCursor = context.getContentResolver().query(uri, projection, null, null,"date DESC");
         mainCursor.moveToFirst();
         CustomMMSAdapter adapter = new CustomMMSAdapter(this.getContext(),mainCursor);
