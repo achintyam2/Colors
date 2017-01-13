@@ -5,15 +5,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
@@ -22,15 +21,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class OpenInbox extends AppCompatActivity {
+public class OpenInbox extends AppCompatActivity implements AttachmentDIalogFragment.DialogClickHandler{
 
     ListView bodyList;
     Context context;
@@ -141,4 +139,15 @@ public class OpenInbox extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onPhotoClicked(Bitmap bitmap) {
+        BitmapDrawable drawableLeft = new BitmapDrawable(getResources(), bitmap);
+        smsToSend.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
+
+    }
+
+    @Override
+    public void onContactClicked(String contactDetails) {
+        smsToSend.setText(contactDetails);
+    }
 }

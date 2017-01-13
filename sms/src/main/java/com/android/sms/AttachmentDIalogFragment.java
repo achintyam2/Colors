@@ -3,6 +3,7 @@ package com.android.sms;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 
+import java.io.IOException;
+
 import static android.app.Activity.RESULT_OK;
 
 public class AttachmentDIalogFragment extends DialogFragment {
@@ -22,11 +25,12 @@ public class AttachmentDIalogFragment extends DialogFragment {
     private static final int SELECT_CONTACT = 2;
     private String selectedImagePath;
     DialogClickHandler call;
+    Bitmap bit;
 
     public AttachmentDIalogFragment(){}
 
     public interface DialogClickHandler {         //Creating a interface to communicate between the fragments
-        void onPhotoClicked(Uri uri);
+        void onPhotoClicked(Bitmap bitmap);
         void onContactClicked(String contactDetails);
     }
 
@@ -75,10 +79,16 @@ public class AttachmentDIalogFragment extends DialogFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
+
                 Uri selectedImageUri = data.getData();
+                try {
+                    bit = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),selectedImageUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 selectedImagePath = getPath(selectedImageUri);
                 call = (DialogClickHandler) getActivity();
-                call.onPhotoClicked(selectedImageUri);
+                call.onPhotoClicked(bit);
                 dismiss();
             }
             else if (requestCode == SELECT_CONTACT)

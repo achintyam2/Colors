@@ -57,7 +57,7 @@ public class SMSInboxFragment extends Fragment {
     {
         Uri uriSms = Uri.parse("content://sms");
         String[] projection = {"address", "date", "body","type"};
-        Cursor cursor = getContext().getContentResolver().query(uriSms,projection, null,null,"date DESC");
+            Cursor cursor = getContext().getContentResolver().query(uriSms,projection, null,null,"date DESC");
         cursor.moveToFirst();
 
         do {

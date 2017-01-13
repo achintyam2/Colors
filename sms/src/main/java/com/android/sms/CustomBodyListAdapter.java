@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 
-public class CustomBodyListAdapter extends BaseAdapter implements AttachmentDIalogFragment.DialogClickHandler {
+public class CustomBodyListAdapter extends BaseAdapter  {
 
     Context context;
     private String name, body, date, time;
@@ -60,17 +60,7 @@ public class CustomBodyListAdapter extends BaseAdapter implements AttachmentDIal
         return 0;
     }
 
-    @Override
-    public void onPhotoClicked(Uri uri) {
-        Holder holder = new Holder();
-        holder.photo.setImageURI(uri);
-    }
 
-    @Override
-    public void onContactClicked(String contactDetails) {
-        Holder holder = new Holder();
-        holder.contact.setText(contactDetails);
-    }
 
 
     private class Holder {

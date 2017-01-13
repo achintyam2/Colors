@@ -45,6 +45,7 @@
         <activity android:name="contacts.android.socialmedia.FriendsList" />
         <activity android:name="contacts.android.socialmedia.GoogleActivity" />
         <activity android:name="com.android.sms.OpenInbox"/>
+        <activity android:name="com.android.mms.Inbox"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

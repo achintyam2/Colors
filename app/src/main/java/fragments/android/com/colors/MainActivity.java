@@ -94,9 +94,7 @@ import contacts.android.themeselector.ColorsDialogFragment;
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                Toast.makeText(context, "Unselected",Toast.LENGTH_LONG).show();
-                int previousPosition = tab.getPosition();
-
+                //Toast.makeText(context, "Unselected",Toast.LENGTH_LONG).show();
             }
 
             @Override
