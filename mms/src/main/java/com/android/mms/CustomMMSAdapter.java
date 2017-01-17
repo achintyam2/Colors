@@ -11,16 +11,24 @@ import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 
 public class CustomMMSAdapter  extends  CursorAdapter {
@@ -28,10 +36,22 @@ public class CustomMMSAdapter  extends  CursorAdapter {
 
     Context con;
     Calendar c;
+    int duplicateThread;
+    int previos,present;
+    boolean flag = true;
+    boolean trag = false;
+    Set<Integer> threads;
+    HashMap<Integer,ArrayList<Integer>> threadHashMap;
+
+
     public CustomMMSAdapter(Context context, Cursor cursor) {
         super(context, cursor,0);
         c =  Calendar.getInstance();
         con = context;
+        threadHashMap = new HashMap<>();
+
+
+
     }
 
     @Override
@@ -46,11 +66,11 @@ public class CustomMMSAdapter  extends  CursorAdapter {
         TextView contactName = (TextView)view.findViewById(R.id.contact_name);
         TextView msgBody = (TextView)view.findViewById(R.id.sms_body);
         TextView msgDate = (TextView)view.findViewById(R.id.sms_date);
+        RelativeLayout r1 = (RelativeLayout)view.findViewById(R.id.r1);
+        RelativeLayout r2 = (RelativeLayout)view.findViewById(R.id.r2);
+        RelativeLayout r3 = (RelativeLayout)view.findViewById(R.id.r3);
 
         final String phone = cursor.getString(cursor.getColumnIndex("address"));
-
-
-
         final String name = getContactName(context,phone);
         String id = name.toUpperCase().substring(0, 1);
         String body = cursor.getString(cursor.getColumnIndexOrThrow("body"));
@@ -58,10 +78,73 @@ public class CustomMMSAdapter  extends  CursorAdapter {
         String date  = getDateTime(dateVal);
         final int thread_id = cursor.getInt(cursor.getColumnIndex("thread_id"));
 
+        duplicateThread = thread_id;
+
         contactID.setText(id);
         contactName.setText(name);
         msgBody.setText(body);
         msgDate.setText(date);
+
+        ArrayList<Integer> threadsCount = threadHashMap.get(thread_id);
+        if (threadsCount == null)
+            threadsCount = new ArrayList<>();
+        threadsCount.add(1);
+        threadHashMap.put(thread_id,threadsCount);
+
+        ArrayList<Integer> countList = threadHashMap.get(thread_id);
+        int size = countList.size();
+
+        if (size>1)
+        {
+            /*r1.setVisibility(View.GONE);
+            r2.setVisibility(View.GONE);
+            r3.setVisibility(View.GONE);*/
+        }
+        else
+        {
+            r1.setVisibility(View.VISIBLE);
+            r2.setVisibility(View.VISIBLE);
+            r3.setVisibility(View.VISIBLE);
+        }
+
+        Log.d("aa","thread "+threadHashMap.size());
+        /*if (threads == null)
+            threads = new HashSet<>();
+        threads.add(duplicateThread);*/
+
+        /*if (flag)
+        {
+            previos = thread_id;
+            flag =false;
+        }
+
+        if (trag)
+        {
+            present = thread_id;
+            trag = false;
+        }
+        trag = true;
+        if (present == thread_id)
+        {
+            previos = present;
+            present = thread_id;
+        }
+
+        if (previos==present)
+        {
+            if (count==0) {
+                r1.setVisibility(View.VISIBLE);
+                r2.setVisibility(View.VISIBLE);
+                r3.setVisibility(View.VISIBLE);
+                count +=1;
+            }
+        }
+        else
+        {
+            r1.setVisibility(View.GONE);
+            r2.setVisibility(View.GONE);
+            r3.setVisibility(View.GONE);
+        }*/
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override

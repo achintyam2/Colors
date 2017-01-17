@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -50,6 +51,14 @@ public class Inbox extends AppCompatActivity {
         bodyList = (ListView) findViewById(R.id.bodyList);
         sendButton = (ImageButton) findViewById(R.id.send);
         smsToSend = (EditText) findViewById(R.id.smsData);
+        smsToSend.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                v.setFocusable(true);
+                v.setFocusableInTouchMode(true);
+                return false;
+            }
+        });
         myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         actionBar = getSupportActionBar();
@@ -69,8 +78,10 @@ public class Inbox extends AppCompatActivity {
 
 
         Uri mUri = Uri.parse("content://mms-sms/conversations/" + thread_id);
-        String[] projection1 = new String[]{"type", "_id", "date", "body","ct_t","date_sent"};
-        Cursor cursor = getContentResolver().query(mUri, projection1, null, null, "date ASC");
+        String[] projection1 = new String[]{"type", "_id", "date", "body","ct_t","date_sent","normalized_date","msg_box","thread_id"};
+
+
+        Cursor cursor = getContentResolver().query(mUri, projection1, null, null, null);
         cursor.moveToFirst();
 
         InboxAdapter inboxAdapter = new InboxAdapter(this, cursor);

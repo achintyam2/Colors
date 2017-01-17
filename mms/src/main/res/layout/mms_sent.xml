@@ -12,6 +12,7 @@
         android:layout_height="wrap_content" />
 
     <RelativeLayout
+        android:background="#123456"
         android:layout_width="250dp"
         android:layout_gravity="end"
         android:layout_marginTop="5dp"
@@ -20,14 +21,13 @@
         <ImageView
             android:id="@+id/mmsPictureSent"
             android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="70dp"
+            android:layout_height="100dp" />
 
         <TextView
             android:id="@+id/mmsTextSent"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/mmsPictureSent"
-            android:background="#123456"
             android:textColor="#ffffff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -36,14 +36,22 @@
             android:id="@+id/mmsTimeSent"
             android:paddingRight="5dp"
             android:paddingBottom="5dp"
-            android:background="#123456"
             android:textColor="#ffffff"
             android:layout_below="@id/mmsTextSent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             />
-
+        <TextView
+            android:id="@+id/mmsStatusSent"
+            android:paddingLeft="5dp"
+            android:paddingBottom="5dp"
+            android:textColor="#00ff00"
+            android:layout_below="@id/mmsTextSent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            />
 
 
     </RelativeLayout>

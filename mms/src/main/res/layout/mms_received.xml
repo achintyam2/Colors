@@ -40,6 +40,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true" />
 
+        <TextView
+            android:id="@+id/mmsStatusReceived"
+            android:paddingLeft="5dp"
+            android:paddingBottom="5dp"
+            android:textColor="#00ff00"
+            android:layout_below="@id/mmsTextReceived"
+            android:layout_width="70dp"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            />
 
 
     </RelativeLayout>

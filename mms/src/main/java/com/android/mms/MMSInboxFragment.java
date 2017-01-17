@@ -2,6 +2,7 @@ package com.android.mms;
 
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -24,14 +25,18 @@ public class MMSInboxFragment extends Fragment {
     Button getMMSList;
     Context context;
     ListView mmsList;
+    ContentResolver contentResolver;
+    Cursor mainCursor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.mms_inbox_main, container, false);
         getMMSList = (Button) view.findViewById(R.id.getMMSList);
-        context = getContext();
+        context = this.getContext();
         mmsList = (ListView) view.findViewById(R.id.mmsList);
+        contentResolver = context.getContentResolver();
+
         getMMSList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,9 +55,11 @@ public class MMSInboxFragment extends Fragment {
 
     private void read() {
 
-        Uri uri = Uri.parse("content://mms-sms/conversations/");
-        final String[] projection = new String[]{"_id","address", "date", "body",  "thread_id"};
-        Cursor mainCursor = context.getContentResolver().query(uri, projection, null, null,"date DESC");
+//        final String[] projection = new String[]{"_id","address", "date", "body",  "thread_id"};
+        final String[] projection = new String[]{"*"};
+        Uri uri = Uri.parse("content://sms");
+        if (mainCursor==null)
+            mainCursor = contentResolver.query(uri, projection, null, null,null);
         mainCursor.moveToFirst();
         CustomMMSAdapter adapter = new CustomMMSAdapter(this.getContext(),mainCursor);
         mmsList.setAdapter(adapter);

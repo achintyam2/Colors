@@ -1,11 +1,14 @@
 package com.android.mms;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,6 +29,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Random;
 
 public class InboxAdapter extends CursorAdapter {
     Calendar c;
@@ -59,6 +67,7 @@ public class InboxAdapter extends CursorAdapter {
         TextView mmsTextSent = (TextView) view.findViewById(R.id.mmsTextSent);
         ImageView mmsPictureSent = (ImageView) view.findViewById(R.id.mmsPictureSent);
         TextView mmsTimeSent = (TextView) view.findViewById(R.id.mmsTimeSent);
+        TextView mmsStatusSent = (TextView) view.findViewById(R.id.mmsStatusSent);
 
 
         RelativeLayout mmsReceived = (RelativeLayout) view.findViewById(R.id.mms_Received);
@@ -66,7 +75,7 @@ public class InboxAdapter extends CursorAdapter {
         TextView mmsTextReceived = (TextView) view.findViewById(R.id.mmsTextReceived);
         ImageView mmsPictureReceived = (ImageView) view.findViewById(R.id.mmsPictureReceived);
         TextView mmsTimeReceived = (TextView) view.findViewById(R.id.mmsTimeReceived);
-
+        TextView mmsStatusReceived = (TextView) view.findViewById(R.id.mmsStatusReceived);
 
         int type = cursor.getInt(cursor.getColumnIndex("type"));
         String msg_id = cursor.getString(cursor.getColumnIndex("_id"));
@@ -77,8 +86,8 @@ public class InboxAdapter extends CursorAdapter {
         String dateSent = getDate(date_sent);
         String timeReceived = getTime(seconds);
         String timeSent = getTime(date_sent);
-
         String body = cursor.getString(cursor.getColumnIndex("body"));
+        int msg_box = cursor.getInt(cursor.getColumnIndex("msg_box"));
 
         if (!"application/vnd.wap.multipart.related".equals(mms)) {
             if (type == 1) {
@@ -103,25 +112,70 @@ public class InboxAdapter extends CursorAdapter {
                 smsStatusSent.setTextColor(Color.GREEN);
                 smsStatusSent.setText("Sent");
                 smsDateSent.setText(dateReceived);
+            } else if (type==5)
+                {
+                    smsSent.setVisibility(View.VISIBLE);
+                    smsReceived.setVisibility(View.GONE);
+                    mmsReceived.setVisibility(View.GONE);
+                    mmsSent.setVisibility(View.GONE);
+                    smsBodySent.setText(body);
+                    smsTimeSent.setText(timeReceived);
+                    smsTimeSent.setTextColor(Color.YELLOW);
+                    smsStatusSent.setTextColor(Color.RED);
+                    smsStatusSent.setText("Failed");
+                    smsDateSent.setText(dateReceived);
+                }
+            else if (type==3)
+            {
+                smsSent.setVisibility(View.VISIBLE);
+                smsReceived.setVisibility(View.GONE);
+                mmsReceived.setVisibility(View.GONE);
+                mmsSent.setVisibility(View.GONE);
+                smsBodySent.setText(body);
+                smsTimeSent.setText(timeReceived);
+                smsTimeSent.setTextColor(Color.YELLOW);
+                smsStatusSent.setTextColor(Color.BLUE);
+                smsStatusSent.setText("Draft");
+                smsDateSent.setText(dateReceived);
             }
         } else {
-            if (!"0".equals(date_sent)) {
+            if (date_sent == 0) {
                 //sent
-                read(msg_id, mmsPictureSent);
                 mmsSent.setVisibility(View.VISIBLE);
                 mmsReceived.setVisibility(View.GONE);
                 smsReceived.setVisibility(View.GONE);
                 smsSent.setVisibility(View.GONE);
-                mmsDateSent.setText(dateReceived);
-                mmsTimeSent.setText(timeReceived);
+                if (msg_box == 4)
+                {
+                    mmsStatusSent.setText("Failed");
+                    mmsStatusSent.setTextColor(Color.RED);
+                }
+                else if (msg_box == 2)
+                {
+                    mmsStatusSent.setText("Sent");
+                    mmsStatusSent.setTextColor(Color.GREEN);
+                }
+                else
+                {
+                    mmsStatusSent.setText("Draft");
+                    mmsStatusSent.setTextColor(Color.BLUE);
+                }
+                long second = seconds * 1000;
+                String newDate = getDate(second);
+                String newTime = getTime(second);
+                readImage(msg_id, mmsPictureSent);
+                mmsDateSent.setText(newDate);
+                mmsTimeSent.setText(newTime);
+                mmsTimeSent.setTextColor(Color.YELLOW);
                 readText(msg_id, mmsTextSent);
             } else {
                 //received
-                read(msg_id, mmsPictureReceived);
                 mmsSent.setVisibility(View.GONE);
                 mmsReceived.setVisibility(View.VISIBLE);
                 smsReceived.setVisibility(View.GONE);
                 smsSent.setVisibility(View.GONE);
+                mmsStatusReceived.setText("Received");
+                readImage(msg_id, mmsPictureReceived);
                 mmsDateReceived.setText(dateSent);
                 mmsTimeReceived.setText(timeSent);
                 readText(msg_id, mmsTextReceived);
@@ -129,28 +183,43 @@ public class InboxAdapter extends CursorAdapter {
         }
     }
 
-    private void read(String id, ImageView pic) {
+    private void readImage(final String id, final ImageView pic) {
 
         Log.d("aa", "msg id " + id);
         String selectionPart = "mid=" + id;
         String[] project = {"*"};
-        Uri uriM = Uri.parse("content://mms/part");
+        final Uri uriM = Uri.parse("content://mms/part");
         Cursor cPart = con.getContentResolver().query(uriM, project, selectionPart, null, null);
         cPart.moveToFirst();
         do {
             String partId = cPart.getString(cPart.getColumnIndex("_id"));
-            String type = cPart.getString(cPart.getColumnIndex("ct"));
+            final String type = cPart.getString(cPart.getColumnIndex("ct"));
             if ("image/jpeg".equals(type) || "image/bmp".equals(type) ||
                     "image/gif".equals(type) || "image/jpg".equals(type) ||
                     "image/png".equals(type)) {
-                Bitmap bitmap = getMmsImage(partId);
+                final Bitmap bitmap = getMmsImage(partId);
                 pic.setImageBitmap(bitmap);
+                pic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String fileFolder = "/Pictures/Screenshots";
+                        String fileName = "/Screenshot_20161020-113320";
+                        File filePath = new File(Environment.getExternalStorageDirectory()+fileFolder+fileName+".png");
+                        Uri fileUri = Uri.fromFile(filePath);
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(fileUri,type);
+                        con.startActivity(intent);
+                    }
+                });
                 Log.d("aa", "bitmap " + bitmap);
             }
         } while (cPart.moveToNext());
 
 
     }
+
 
     private void readText(String id, TextView text) {
         String selectionPart = "mid=" + id;

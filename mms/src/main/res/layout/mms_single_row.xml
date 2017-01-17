@@ -9,9 +9,9 @@
 
     <RelativeLayout
         android:id="@+id/r1"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         >
 
         <ImageView
@@ -36,6 +36,7 @@
 
     <RelativeLayout
         android:id="@+id/r3"
+        android:visibility="gone"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
@@ -48,6 +49,8 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/r2"
+        android:visibility="gone"
         android:layout_toLeftOf="@id/r3"
         android:layout_toRightOf="@id/r1"
         android:layout_marginLeft="10dp"
