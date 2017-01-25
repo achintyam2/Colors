@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:id="@+id/r1"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
@@ -36,7 +36,7 @@
 
     <RelativeLayout
         android:id="@+id/r3"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
@@ -50,7 +50,7 @@
 
     <RelativeLayout
         android:id="@+id/r2"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_toLeftOf="@id/r3"
         android:layout_toRightOf="@id/r1"
         android:layout_marginLeft="10dp"

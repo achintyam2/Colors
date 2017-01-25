@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -20,18 +21,22 @@ import static android.app.Activity.RESULT_OK;
 
 public class AttachmentDIalogFragment extends DialogFragment {
 
-    RadioButton photos,contacts;
+    RadioButton photo, contact, video,audio;
     private static final int SELECT_PICTURE = 1;
     private static final int SELECT_CONTACT = 2;
-    private String selectedImagePath;
+    private static final int SELECT_VIDEO = 3;
+    private static final int SELECT_AUDIO = 4;
+
     DialogClickHandler call;
-    Bitmap bit;
+    Bitmap bitmapPhoto,bitmapVideo;
 
     public AttachmentDIalogFragment(){}
 
     public interface DialogClickHandler {         //Creating a interface to communicate between the fragments
         void onPhotoClicked(Bitmap bitmap);
         void onContactClicked(String contactDetails);
+        void onVideoClicked(String path);
+        void onAudioClicked(Uri uri);
     }
 
     public static AttachmentDIalogFragment newInstance() {
@@ -48,10 +53,12 @@ public class AttachmentDIalogFragment extends DialogFragment {
 
         getDialog().setTitle("Select Attachment type");
 
-        photos = (RadioButton) rootView.findViewById(R.id.photos);
-        contacts = (RadioButton) rootView.findViewById(R.id.contacts);
+        photo = (RadioButton) rootView.findViewById(R.id.photos);
+        contact = (RadioButton) rootView.findViewById(R.id.contacts);
+        video = (RadioButton) rootView.findViewById(R.id.videos);
+        audio = (RadioButton) rootView.findViewById(R.id.audios);
 
-        photos.setOnClickListener(new View.OnClickListener() {
+        photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -61,14 +68,35 @@ public class AttachmentDIalogFragment extends DialogFragment {
             }
         });
 
-        contacts.setOnClickListener(new View.OnClickListener() {
+        contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Uri uri = Uri.parse("content://contacts");
+                Uri uri = Uri.parse("content://contact");
                 Intent intent = new Intent(Intent.ACTION_PICK, uri);
                 intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
                 startActivityForResult(intent, SELECT_CONTACT);
+
+            }
+        });
+
+        video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("video/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Video"), SELECT_VIDEO);
+            }
+        });
+
+        audio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("audio/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Audio "),SELECT_AUDIO);
             }
         });
 
@@ -80,15 +108,17 @@ public class AttachmentDIalogFragment extends DialogFragment {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
 
+
+
                 Uri selectedImageUri = data.getData();
                 try {
-                    bit = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),selectedImageUri);
+                    bitmapPhoto = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),selectedImageUri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                selectedImagePath = getPath(selectedImageUri);
+                String selectedImagePath = getImagePath(selectedImageUri);
                 call = (DialogClickHandler) getActivity();
-                call.onPhotoClicked(bit);
+                call.onPhotoClicked(bitmapPhoto);
                 dismiss();
             }
             else if (requestCode == SELECT_CONTACT)
@@ -109,15 +139,51 @@ public class AttachmentDIalogFragment extends DialogFragment {
                 call.onContactClicked(contact);
                 dismiss();
             }
+            else if (requestCode == SELECT_VIDEO)
+            {
+                if(data.getData()!=null)
+                {
+                    Uri uri = data.getData();
+
+                    String selectedVideoPath = getVideoPath(data.getData());
+                    call = (DialogClickHandler) getActivity();
+                    call.onVideoClicked(selectedVideoPath);
+                    dismiss();
+                }
+                else
+                {
+                    Toast.makeText(getContext(), "Failed to select video" , Toast.LENGTH_LONG).show();
+                }
+            }
+            else if (requestCode == SELECT_AUDIO)
+            {
+                if(data.getData()!=null)
+                {
+                    Uri uri = data.getData();
+                    call = (DialogClickHandler) getActivity();
+                    call.onAudioClicked(uri);
+                    dismiss();
+                }
+                else
+                {
+                    Toast.makeText(getContext(), "Failed to select audio" , Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 
-    public String getPath(Uri uri) {
+    public String getImagePath(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
         cursor.moveToFirst();
         int column_index = cursor.getColumnIndexOrThrow(projection[0]);
-
+        return cursor.getString(column_index);
+    }
+    public String getVideoPath(Uri uri) {
+        String[] projection = { MediaStore.Video.Media.DATA };
+        Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
+        cursor.moveToFirst();
+        int column_index = cursor.getColumnIndexOrThrow(projection[0]);
         return cursor.getString(column_index);
     }
 

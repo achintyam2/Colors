@@ -33,30 +33,26 @@ import java.util.Set;
 
 public class CustomMMSAdapter  extends  CursorAdapter {
 
-
     Context con;
     Calendar c;
     int duplicateThread;
-    int previos,present;
-    boolean flag = true;
-    boolean trag = false;
-    Set<Integer> threads;
-    HashMap<Integer,ArrayList<Integer>> threadHashMap;
-
+    Set<Integer> threads ;
+    String TAG = "CustomMMSAdapter";
+    ViewGroup parent;
 
     public CustomMMSAdapter(Context context, Cursor cursor) {
         super(context, cursor,0);
         c =  Calendar.getInstance();
         con = context;
-        threadHashMap = new HashMap<>();
-
-
-
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.mms_single_row, parent, false);
+
+        if(this.parent ==null) this.parent = parent;
+        View view = LayoutInflater.from(context).inflate(R.layout.mms_single_row, parent, false);
+        Log.d(TAG, "new view: " + view.getId());
+        return view;
     }
 
     @Override
@@ -71,21 +67,32 @@ public class CustomMMSAdapter  extends  CursorAdapter {
         RelativeLayout r3 = (RelativeLayout)view.findViewById(R.id.r3);
 
         final String phone = cursor.getString(cursor.getColumnIndex("address"));
-        final String name = getContactName(context,phone);
-        String id = name.toUpperCase().substring(0, 1);
+        //final String name = getContactName(context,phone);
+        String id = phone.toUpperCase().substring(0, 1);
         String body = cursor.getString(cursor.getColumnIndexOrThrow("body"));
         long dateVal = cursor.getLong(cursor.getColumnIndex("date"));
         String date  = getDateTime(dateVal);
         final int thread_id = cursor.getInt(cursor.getColumnIndex("thread_id"));
 
-        duplicateThread = thread_id;
+        if (threads==null)
+            threads = new HashSet<>();
 
-        contactID.setText(id);
-        contactName.setText(name);
-        msgBody.setText(body);
-        msgDate.setText(date);
+        if (!threads.contains(thread_id)) {
+            threads.add(thread_id);
+            view.setVisibility(View.VISIBLE);
+            Log.d(TAG, "show view id: " + view.getId());
+            contactID.setText(id);
+            contactName.setText(phone);
+            msgBody.setText(body);
+            msgDate.setText(date);
+        }
+        else {
+            Log.d(TAG, "hide view id: " + view.getId());
+            view.setVisibility(View.GONE);
+            notifyDataSetChanged();
+        }
 
-        ArrayList<Integer> threadsCount = threadHashMap.get(thread_id);
+        /*ArrayList<Integer> threadsCount = threadHashMap.get(thread_id);
         if (threadsCount == null)
             threadsCount = new ArrayList<>();
         threadsCount.add(1);
@@ -96,62 +103,24 @@ public class CustomMMSAdapter  extends  CursorAdapter {
 
         if (size>1)
         {
-            /*r1.setVisibility(View.GONE);
+            r1.setVisibility(View.GONE);
             r2.setVisibility(View.GONE);
-            r3.setVisibility(View.GONE);*/
+            r3.setVisibility(View.GONE);
         }
         else
         {
             r1.setVisibility(View.VISIBLE);
             r2.setVisibility(View.VISIBLE);
             r3.setVisibility(View.VISIBLE);
-        }
-
-        Log.d("aa","thread "+threadHashMap.size());
-        /*if (threads == null)
-            threads = new HashSet<>();
-        threads.add(duplicateThread);*/
-
-        /*if (flag)
-        {
-            previos = thread_id;
-            flag =false;
-        }
-
-        if (trag)
-        {
-            present = thread_id;
-            trag = false;
-        }
-        trag = true;
-        if (present == thread_id)
-        {
-            previos = present;
-            present = thread_id;
-        }
-
-        if (previos==present)
-        {
-            if (count==0) {
-                r1.setVisibility(View.VISIBLE);
-                r2.setVisibility(View.VISIBLE);
-                r3.setVisibility(View.VISIBLE);
-                count +=1;
-            }
-        }
-        else
-        {
-            r1.setVisibility(View.GONE);
-            r2.setVisibility(View.GONE);
-            r3.setVisibility(View.GONE);
         }*/
+
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context,Inbox.class);
                 intent.putExtra("thread",thread_id);
-                intent.putExtra("name",name);
+                intent.putExtra("name",phone);
                 context.startActivity(intent);
 
             }

@@ -54,16 +54,15 @@ public class MMSInboxFragment extends Fragment {
     }
 
     private void read() {
-
 //        final String[] projection = new String[]{"_id","address", "date", "body",  "thread_id"};
         final String[] projection = new String[]{"*"};
         Uri uri = Uri.parse("content://sms");
         if (mainCursor==null)
             mainCursor = contentResolver.query(uri, projection, null, null,null);
         mainCursor.moveToFirst();
+
         CustomMMSAdapter adapter = new CustomMMSAdapter(this.getContext(),mainCursor);
         mmsList.setAdapter(adapter);
-
     }
 
     private boolean isAllowed()

@@ -1,148 +1,324 @@
 package com.android.sms;
 
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
-import android.provider.ContactsContract;
-import android.view.Gravity;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Telephony;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
+import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFragment.MessageOptionsDialogClickHandler{
+    private Calendar c;
+    private Context con;
+    private String bodyCopied,nameCopied;
+    int msgId;
 
-public class CustomBodyListAdapter extends BaseAdapter  {
-
-    Context context;
-    private String name, body, date, time;
-    private long timeStamp;
-    private int type;
-    private static LayoutInflater inflater = null;
-    ArrayList<String> bodies;
-    ArrayList<Long> times;
-    ArrayList<Integer> types;
-
-
-    public CustomBodyListAdapter(OpenInbox openInbox,
-                                 String contactName,
-                                 ArrayList<String> body,
-                                 ArrayList<Long> time,
-                                 ArrayList<Integer> type) {
-        context = openInbox.getApplicationContext();
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        name = contactName;
-        bodies = body;
-        times = time;
-        types = type;
-    }
-
-
-    @Override
-    public int getCount() {
-        return bodies.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return bodies.get(getCount() - position - 1);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-
-
-
-    private class Holder {
-        TextView bodyLeft, timeLeft, smsDateLeft, statusLeft,bodyRight,timeRight,statusRight,smsDateRight,contact;
-        RelativeLayout smsLeft,smsRight;
-        ImageView photo;
+     CustomBodyListAdapter(Context context, Cursor cursor) {
+        super(context, cursor, 0);
+        c = Calendar.getInstance();
 
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        return LayoutInflater.from(context).inflate(R.layout.inbox_list_single_row, parent, false);
+    }
 
-        Holder holder = new Holder();
-        if(convertView==null)
-        convertView = inflater.inflate(R.layout.body_list_single_row, null);
+    @Override
+    public void bindView(View view, final Context context, Cursor cursor) {
 
-        holder.bodyLeft = (TextView) convertView.findViewById(R.id.bodyLeft);
-        holder.bodyRight = (TextView) convertView.findViewById(R.id.bodyRight);
-        holder.timeLeft = (TextView) convertView.findViewById(R.id.timeLeft);
-        holder.timeRight = (TextView) convertView.findViewById(R.id.timeRight);
-        holder.smsDateLeft = (TextView) convertView.findViewById(R.id.dateLeft);
-        holder.smsDateRight = (TextView) convertView.findViewById(R.id.dateRight);
-        holder.statusLeft = (TextView) convertView.findViewById(R.id.statusLeft);
-        holder.statusRight = (TextView) convertView.findViewById(R.id.statusRight);
-        holder.smsLeft = (RelativeLayout) convertView.findViewById(R.id.messagesLeft);
-        holder.smsRight = (RelativeLayout) convertView.findViewById(R.id.messagesRight);
-        holder.contact = (TextView) convertView.findViewById(R.id.contactDetails);
-        holder.photo = (ImageView) convertView.findViewById(R.id.photoSelected);
+        con = context;
+        RelativeLayout smsSent = (RelativeLayout) view.findViewById(R.id.sms_Sent);
+        TextView smsDateSent = (TextView) view.findViewById(R.id.smsDateSent);
+        TextView smsBodySent = (TextView) view.findViewById(R.id.smsBodySent);
+        TextView smsTimeSent = (TextView) view.findViewById(R.id.smsTimeSent);
+        TextView smsStatusSent = (TextView) view.findViewById(R.id.smsStatusSent);
 
-        body = bodies.get(getCount() - position - 1);
-        timeStamp = times.get(getCount() - position - 1);
-        type = types.get(getCount() - position - 1);
-        time = getTime(timeStamp);
-        date = getDate(timeStamp);
+        RelativeLayout smsReceived = (RelativeLayout) view.findViewById(R.id.sms_Received);
+        TextView smsDateReceived = (TextView) view.findViewById(R.id.smsDateReceived);
+        TextView smsBodyReceived = (TextView) view.findViewById(R.id.smsBodyReceived);
+        TextView smsTimeReceived = (TextView) view.findViewById(R.id.smsTimeReceived);
+        TextView smsStatusReceived = (TextView) view.findViewById(R.id.smsStatusReceived);
 
-        holder.bodyLeft.setText(body);
-        holder.bodyRight.setText(body);
-        holder.timeLeft.setText(time);
-        holder.timeRight.setText(time);
+        RelativeLayout mmsSent = (RelativeLayout) view.findViewById(R.id.mms_Sent);
+        TextView mmsDateSent = (TextView) view.findViewById(R.id.mmsDateSent);
+        TextView mmsTextSent = (TextView) view.findViewById(R.id.mmsTextSent);
+        ImageView mmsPictureSent = (ImageView) view.findViewById(R.id.mmsPictureSent);
+        TextView mmsTimeSent = (TextView) view.findViewById(R.id.mmsTimeSent);
+        TextView mmsStatusSent = (TextView) view.findViewById(R.id.mmsStatusSent);
 
-        if (type==1)
-        {
-            holder.statusLeft.setText("Received");
-            holder.statusLeft.setTextColor(Color.GREEN);
-            holder.smsDateLeft.setText(date);
-            holder.smsDateRight.setVisibility(View.INVISIBLE);
-            holder.smsDateLeft.setVisibility(View.VISIBLE);
-            holder.smsRight.setVisibility(View.INVISIBLE);
-            holder.smsLeft.setVisibility(View.VISIBLE);
+        RelativeLayout mmsReceived = (RelativeLayout) view.findViewById(R.id.mms_Received);
+        TextView mmsDateReceived = (TextView) view.findViewById(R.id.mmsDateReceived);
+        TextView mmsTextReceived = (TextView) view.findViewById(R.id.mmsTextReceived);
+        ImageView mmsPictureReceived = (ImageView) view.findViewById(R.id.mmsPictureReceived);
+        TextView mmsTimeReceived = (TextView) view.findViewById(R.id.mmsTimeReceived);
+        TextView mmsStatusReceived = (TextView) view.findViewById(R.id.mmsStatusReceived);
+
+        final String name  = cursor.getString(cursor.getColumnIndex("address"));
+        int type = cursor.getInt(cursor.getColumnIndex("type"));
+        final String msg_id = cursor.getString(cursor.getColumnIndex("_id"));
+        String mms = cursor.getString(cursor.getColumnIndex("ct_t"));
+        long seconds = cursor.getLong(cursor.getColumnIndex("date"));
+        long date_sent = cursor.getLong(cursor.getColumnIndex("date_sent"));
+        String dateReceived = getDate(seconds);
+        String dateSent = getDate(date_sent);
+        String timeReceived = getTime(seconds);
+        String timeSent = getTime(date_sent);
+        final String body = cursor.getString(cursor.getColumnIndex("body"));
+        int msg_box = cursor.getInt(cursor.getColumnIndex("msg_box"));
+
+
+        if (!"application/vnd.wap.multipart.related".equals(mms)) {
+            if (type == 1) {
+                smsReceived.setVisibility(View.VISIBLE);
+                smsSent.setVisibility(View.GONE);
+                mmsReceived.setVisibility(View.GONE);
+                mmsSent.setVisibility(View.GONE);
+                smsBodyReceived.setText(body);
+                smsTimeReceived.setText(timeSent);
+                smsTimeReceived.setTextColor(Color.YELLOW);
+                smsStatusReceived.setText("Received");
+                smsStatusReceived.setTextColor(Color.GREEN);
+                smsDateReceived.setText(dateSent);
+                smsReceived.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int id = Integer.parseInt(msg_id);
+                        showMessageOptionsDialog(name,body,id);
+                        return false;
+                    }
+                });
+            } else if (type == 2) {
+                smsSent.setVisibility(View.VISIBLE);
+                smsReceived.setVisibility(View.GONE);
+                mmsReceived.setVisibility(View.GONE);
+                mmsSent.setVisibility(View.GONE);
+                smsBodySent.setText(body);
+                smsTimeSent.setText(timeReceived);
+                smsTimeSent.setTextColor(Color.YELLOW);
+                smsStatusSent.setTextColor(Color.GREEN);
+                smsStatusSent.setText("Sent");
+                smsDateSent.setText(dateReceived);
+                smsSent.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int id = Integer.parseInt(msg_id);
+                        showMessageOptionsDialog(name,body,id);
+                        return false;
+                    }
+                });
+            } else if (type==5)
+            {
+                smsSent.setVisibility(View.VISIBLE);
+                smsReceived.setVisibility(View.GONE);
+                mmsReceived.setVisibility(View.GONE);
+                mmsSent.setVisibility(View.GONE);
+                smsBodySent.setText(body);
+                smsTimeSent.setText(timeReceived);
+                smsTimeSent.setTextColor(Color.YELLOW);
+                smsStatusSent.setTextColor(Color.RED);
+                smsStatusSent.setText("Failed");
+                smsDateSent.setText(dateReceived);
+                smsSent.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int id = Integer.parseInt(msg_id);
+                        showMessageOptionsDialog(name,body,id);
+                        return false;
+                    }
+                });
+            }
+            else if (type==3)
+            {
+                smsSent.setVisibility(View.VISIBLE);
+                smsReceived.setVisibility(View.GONE);
+                mmsReceived.setVisibility(View.GONE);
+                mmsSent.setVisibility(View.GONE);
+                smsBodySent.setText(body);
+                smsTimeSent.setText(timeReceived);
+                smsTimeSent.setTextColor(Color.YELLOW);
+                smsStatusSent.setTextColor(Color.BLUE);
+                smsStatusSent.setText("Draft");
+                smsDateSent.setText(dateReceived);
+                smsSent.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int id = Integer.parseInt(msg_id);
+                        showMessageOptionsDialog(name,body,id);
+                        return false;
+                    }
+                });
+            }
+        } else {
+            if (date_sent == 0) {
+                //sent
+                mmsSent.setVisibility(View.VISIBLE);
+                mmsReceived.setVisibility(View.GONE);
+                smsReceived.setVisibility(View.GONE);
+                smsSent.setVisibility(View.GONE);
+                if (msg_box == 4)
+                {
+                    mmsStatusSent.setText("Failed");
+                    mmsStatusSent.setTextColor(Color.RED);
+                }
+                else if (msg_box == 2)
+                {
+                    mmsStatusSent.setText("Sent");
+                    mmsStatusSent.setTextColor(Color.GREEN);
+                }
+                else
+                {
+                    mmsStatusSent.setText("Draft");
+                    mmsStatusSent.setTextColor(Color.BLUE);
+                }
+                long second = seconds * 1000;
+                String newDate = getDate(second);
+                String newTime = getTime(second);
+                readImage(msg_id, mmsPictureSent);
+                mmsDateSent.setText(newDate);
+                mmsTimeSent.setText(newTime);
+                mmsTimeSent.setTextColor(Color.YELLOW);
+                readText(msg_id, mmsTextSent);
+            } else {
+                //received
+                mmsSent.setVisibility(View.GONE);
+                mmsReceived.setVisibility(View.VISIBLE);
+                smsReceived.setVisibility(View.GONE);
+                smsSent.setVisibility(View.GONE);
+                mmsStatusReceived.setText("Received");
+                readImage(msg_id, mmsPictureReceived);
+                mmsDateReceived.setText(dateSent);
+                mmsTimeReceived.setText(timeSent);
+                readText(msg_id, mmsTextReceived);
+            }
         }
-       else if (type==2)
-        {
-            holder.statusRight.setText("Sent");
-            holder.statusRight.setTextColor(Color.GREEN);
-            holder.smsDateRight.setText(date);
-            holder.smsDateLeft.setVisibility(View.INVISIBLE);
-            holder.smsDateRight.setVisibility(View.VISIBLE);
-            holder.smsLeft.setVisibility(View.INVISIBLE);
-            holder.smsRight.setVisibility(View.VISIBLE);
-        }
-        else if (type==3)
-        {
-            holder.statusRight.setText("Draft");
-            holder.statusRight.setTextColor(Color.BLUE);
-            holder.smsDateRight.setText(date);
-            holder.smsDateLeft.setVisibility(View.INVISIBLE);
-            holder.smsDateRight.setVisibility(View.VISIBLE);
-            holder.smsLeft.setVisibility(View.INVISIBLE);
-            holder.smsRight.setVisibility(View.VISIBLE);
-        }
-        else if(type==5)
-        {
-            holder.statusRight.setText("Failed");
-            holder.statusRight.setTextColor(Color.RED);
-            holder.smsDateRight.setText(date);
-            holder.smsDateLeft.setVisibility(View.INVISIBLE);
-            holder.smsDateRight.setVisibility(View.VISIBLE);
-            holder.smsLeft.setVisibility(View.INVISIBLE);
-            holder.smsRight.setVisibility(View.VISIBLE);
-        }
+    }
 
-        return convertView;
+    private void readImage(final String id, final ImageView pic) {
+
+        Log.d("aa", "msg id " + id);
+        String selectionPart = "mid=" + id;
+        String[] project = {"*"};
+        final Uri uriM = Uri.parse("content://mms/part");
+        Cursor cPart = con.getContentResolver().query(uriM, project, selectionPart, null, null);
+        cPart.moveToFirst();
+        do {
+            String partId = cPart.getString(cPart.getColumnIndex("_id"));
+            final String type = cPart.getString(cPart.getColumnIndex("ct"));
+            if ("image/jpeg".equals(type) || "image/bmp".equals(type) ||
+                    "image/gif".equals(type) || "image/jpg".equals(type) ||
+                    "image/png".equals(type)) {
+                final Bitmap bitmap = getMmsImage(partId);
+                pic.setImageBitmap(bitmap);
+                pic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        /*String fileFolder = "/Pictures/Screenshots";
+                        String fileName = "/Screenshot_20161020-113320";
+                        File filePath = new File(Environment.getExternalStorageDirectory()+fileFolder+fileName+".png");
+                        Uri fileUri = Uri.fromFile(filePath);
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(fileUri,type);
+                        con.startActivity(intent);*/
+                    }
+                });
+                Log.d("aa", "bitmap " + bitmap);
+            }
+        } while (cPart.moveToNext());
+
+
+    }
+
+
+    private void readText(String id, TextView text) {
+        String selectionPart = "mid=" + id;
+        Uri uri = Uri.parse("content://mms/part");
+        String[] project = {"*"};
+        Cursor cursor = con.getContentResolver().query(uri, project, selectionPart, null, null);
+        cursor.moveToFirst();
+        do {
+            String partId = cursor.getString(cursor.getColumnIndex("_id"));
+            String type = cursor.getString(cursor.getColumnIndex("ct"));
+            if ("text/plain".equals(type)) {
+                String data = cursor.getString(cursor.getColumnIndex("_data"));
+                String body;
+                if (data != null) {
+                    // implementation of this method below
+                    body = getMmsText(partId);
+                    text.setText(body);
+                } else {
+                    body = cursor.getString(cursor.getColumnIndex("text"));
+                    text.setText(body);
+                }
+            }
+        } while (cursor.moveToNext());
+
+    }
+
+    private String getMmsText(String id) {
+        Uri partURI = Uri.parse("content://mms/part/" + id);
+        InputStream is = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            is = con.getContentResolver().openInputStream(partURI);
+            if (is != null) {
+                InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+                BufferedReader reader = new BufferedReader(isr);
+                String temp = reader.readLine();
+                while (temp != null) {
+                    sb.append(temp);
+                    temp = reader.readLine();
+                }
+            }
+        } catch (IOException e) {
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        return sb.toString();
     }
 
     private String getDate(long timeStamp) {
@@ -158,4 +334,120 @@ public class CustomBodyListAdapter extends BaseAdapter  {
         String dateString = formatter.format(date);
         return dateString;
     }
+
+
+    private Bitmap getMmsImage(String _id) {
+        Uri partURI = Uri.parse("content://mms/part/" + _id);
+        InputStream is = null;
+        Bitmap bitmap = null;
+        try {
+            is = con.getContentResolver().openInputStream(partURI);
+            bitmap = BitmapFactory.decodeStream(is);
+        } catch (IOException e) {
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        return bitmap;
+    }
+
+    @Override
+    public void onForwardClcked() {
+        Toast.makeText(con,"Forward Data : "+bodyCopied,Toast.LENGTH_SHORT).show();
+        forwardMessage(bodyCopied);
+    }
+
+    @Override
+    public void onCopyClicked() {
+        Toast.makeText(con,"Copied Data",Toast.LENGTH_SHORT).show();
+        copytoClipboard(bodyCopied);
+    }
+
+    @Override
+    public void onDeleteClicked() {
+//        Toast.makeText(con,"To delete : "+bodyCopied,Toast.LENGTH_SHORT).show();
+        deleteMessage(con,msgId);
+    }
+
+    private void showMessageOptionsDialog(String name,String body,int sms_id)
+    {
+        msgId = sms_id;
+        nameCopied = name;
+        bodyCopied = body;
+        FragmentTransaction fragmentTransaction = ((FragmentActivity)con).getSupportFragmentManager().beginTransaction();
+        BodyOnClickDialogFragment bodyOnClickDialogFragment = new BodyOnClickDialogFragment().newInstance();
+        bodyOnClickDialogFragment.setListener(CustomBodyListAdapter.this);
+        bodyOnClickDialogFragment.show(fragmentTransaction,"messageoptions");
+    }
+
+    private void deleteMessage(Context context,int SmsId) {
+        /*if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            if (!Telephony.Sms.getDefaultSmsPackage(con).equals("com.android.sms")) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this.con);
+                builder.setMessage("This app is not set as your default messaging app. Do you want to set it as default?")
+                        .setCancelable(false)
+                        .setTitle("Alert!")
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @TargetApi(19)
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent = new Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT);
+                                intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, con.getPackageName());
+                                con.startActivity(intent);
+                            }
+                        });
+                builder.show();
+            }
+        }*/
+        Cursor c = context.getContentResolver().query(Uri.parse("content://sms/"),new String[] {"_id", "thread_id", "address", "body" }, null, null, null);
+        while (c.moveToNext()) {
+            try {
+                String pid = c.getString(c.getColumnIndex("_id")); // Get id;
+                String threadID = c.getString(c.getColumnIndex("thread_id"));
+                String smsMessage = c.getString(3);
+                String msgId = Integer.toString(SmsId);
+                if (pid.equals(msgId))
+                {
+                    Log.d("aa","SMSID "+SmsId);
+                    Log.d("aa","pid "+pid);
+                    Log.d("aa","message "+smsMessage);
+                    String uri = "content://sms/inbox/"+pid;
+                    Uri mUri = Uri.parse("content://mms-sms/conversations/" + pid);
+//                    int rows = context.getContentResolver().delete(Uri.parse("content://sms"),"_id=?",new String[]{pid});
+                    int rows = context.getContentResolver().delete(Uri.parse("content://sms/conversations/" + threadID), "_id = ?", new String[]{pid});
+                    Toast.makeText(context, rows+" Message Deleted", Toast.LENGTH_LONG).show();
+                    notifyDataSetChanged();
+                    break;
+                }
+            } catch (Exception e) {
+                Log.d("exception",  "occurred"+e.getMessage());
+            }
+        }
+    }
+
+    private void forwardMessage(String body)
+    {
+        //TODO set the body to the EditText
+        Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+        smsIntent.setType("vnd.android-dir/mms-sms");
+//        smsIntent.putExtra("address", "12125551212");
+        smsIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        smsIntent.putExtra("sms_body",body);
+        con.startActivity(smsIntent);
+    }
+    private void copytoClipboard(String value) {
+        ClipboardManager clipboard = (ClipboardManager) con.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copied address", value);
+        clipboard.setPrimaryClip(clip);
+    }
 }
+

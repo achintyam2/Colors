@@ -2,59 +2,50 @@ package com.android.sms;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Vector;
 
 
-public class CustomSMSAdapter extends BaseAdapter {
+class CustomSMSAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
-    Context context;
-    Vector<HashMap<String, Object>> smsListVector;
-    HashMap<String, Object> mapFromSMSVector;
-    String contactName, smsBody, contactID,date;
-    Calendar c;
-    HashMap<String,ArrayList<String>> nameAndBodyList;
-    HashMap<String,ArrayList<Long>> nameAndTimeList;
-    HashMap<String,ArrayList<Integer>> nameAndTypeList;
-    ArrayList<String> bodies;
-    long seconds;
+    private Context context;
+    private HashMap<String, MyThread> mapFromSMSVector;
+    private String contactName,thread_id;
+    private ArrayList<String> threads;
 
 
-    public CustomSMSAdapter(SMSInboxFragment smsInboxFragment,
-                            Vector<HashMap<String, Object>> receivedSMSVector,
-                            HashMap<String,ArrayList<String>> nameAndBody,
-                            HashMap<String,ArrayList<Long>> nameAndTime,
-                            HashMap<String,ArrayList<Integer>> nameAndType) {
+    CustomSMSAdapter(SMSInboxFragment smsInboxFragment,
+                            HashMap<String, MyThread> receivedSMSMap,
+                            ArrayList<String> threadIds) {
         context = smsInboxFragment.getContext();
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        smsListVector = receivedSMSVector;
-        c = Calendar.getInstance();
-        nameAndBodyList = nameAndBody;
-        nameAndTimeList = nameAndTime;
-        nameAndTypeList = nameAndType;
-        mapFromSMSVector = new HashMap<>();
-        bodies = new ArrayList<>();
+        mapFromSMSVector = receivedSMSMap;
+        threads = threadIds;
+        Log.d("aa","threadsList "+threads);
     }
 
     @Override
     public int getCount() {
-        return smsListVector.size();
+        return threads.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return smsListVector.get(position);
+        return mapFromSMSVector.get(threads.get(position));
     }
 
     @Override
@@ -65,87 +56,76 @@ public class CustomSMSAdapter extends BaseAdapter {
 
     private class Holder {
         TextView contactName, smsDate, smsBody, contactID;
-
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         Holder holder = new Holder();
-        if (convertView==null)
-            convertView = inflater.inflate(R.layout.sms_single_row, null);
 
+        View view = inflater.inflate(R.layout.sms_single_row, null);
 
-            holder.contactName = (TextView) convertView.findViewById(R.id.contact_name);
-            holder.smsDate = (TextView) convertView.findViewById(R.id.sms_date);
-            holder.smsBody = (TextView) convertView.findViewById(R.id.sms_body);
-            holder.contactID = (TextView) convertView.findViewById(R.id.contactID);
+        holder.contactName = (TextView) view.findViewById(R.id.contact_name);
+        holder.smsDate = (TextView) view.findViewById(R.id.sms_date);
+        holder.smsBody = (TextView) view.findViewById(R.id.sms_body);
+        holder.contactID = (TextView) view.findViewById(R.id.contactID);
 
-            mapFromSMSVector = smsListVector.get(position);
-            contactName = (String) mapFromSMSVector.get("address");
+        MyThread myThread = mapFromSMSVector.get(threads.get(position));
+        thread_id = myThread.getThreadId();
+        contactName = myThread.getName();
+        String cName = getContactName(context,contactName);
+        String date = myThread.getTime();
+        String smsBody = myThread.getMessage();
+        final String contactID = contactName.toUpperCase().substring(0, 1);
 
-            bodies = nameAndBodyList.get(contactName);
+        holder.contactName.setText(cName);
+        holder.contactID.setText("".concat(contactID));
+        holder.smsDate.setText(date);
+        holder.smsBody.setText(smsBody);
 
-            if (contactName == null)
-                contactID = "3";
-            else
-                contactID = contactName.toUpperCase().substring(0, 1);
-            holder.contactName.setText(contactName);
-            holder.contactID.setText(contactID + "");
-
-            smsBody = (String) mapFromSMSVector.get("body");
-            holder.smsBody.setText(bodies.get(0));
-
-            seconds = (long) mapFromSMSVector.get("date");
-            date = getDateTime(seconds);
-            holder.smsDate.setText(date);
-
-            convertView.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mapFromSMSVector = smsListVector.get(position);
-                    contactName = (String) mapFromSMSVector.get("address");
+                    MyThread m = (MyThread) getItem(position);
+                    String phone = m.getName();
+                    String name = getContactName(context,phone);
+                    String thread = m.getThreadId();
                     Intent intent = new Intent(context, OpenInbox.class);
-                    intent.putExtra("name", contactName);
-                    intent.putExtra("nameAndBody", nameAndBodyList);
-                    intent.putExtra("nameAndTime", nameAndTimeList);
-                    intent.putExtra("nameAndType", nameAndTypeList);
+                    intent.putExtra("name", name);
+                    intent.putExtra("thread_id",thread);
                     context.startActivity(intent);
                 }
             });
 
-        return convertView;
+        return view;
     }
 
-    private String getDateTime(long time) {
-        String dateString;
-        int currentYears = c.get(Calendar.YEAR);
-        String currentYear = Integer.toString(currentYears);
-        int currentDays = c.get(Calendar.DAY_OF_MONTH);
-        String currentDay = Integer.toString(currentDays);
+    private String getContactName(Context context, String number) {
 
-        SimpleDateFormat yearFormatter = new SimpleDateFormat("yyyy");
-        String year = yearFormatter.format(new Date(time));
+        String name = null;
+        // define the columns I want the query to return
+        String[] projection = new String[] {
+                ContactsContract.PhoneLookup.DISPLAY_NAME,
+                ContactsContract.PhoneLookup._ID};
 
-        SimpleDateFormat dayFormatter = new SimpleDateFormat("d");
-        String day = dayFormatter.format(new Date(time));
-        int previousDay = currentDays - 1;
+        // encode the phone number and build the filter URI
+        Uri contactUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+        // query time
+        Cursor cursor = context.getContentResolver().query(contactUri, projection, null, null, null);
 
-        if (day.equals(currentDay)) {
-            SimpleDateFormat formatter = new SimpleDateFormat("h:mm a");
-            dateString = formatter.format(new Date(time));
-        } else if (currentDays != previousDay) {
-            if (year.equals(currentYear)) {
-                SimpleDateFormat formatter = new SimpleDateFormat("MMM d");
-                dateString = formatter.format(new Date(time));
+        if(cursor != null) {
+            if (cursor.moveToFirst()) {
+                name =     cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+//                Log.v(TAG, "Started uploadcontactphoto: Contact Found @ " + number);
+//                Log.v(TAG, "Started uploadcontactphoto: Contact name  = " + name);
             } else {
-                SimpleDateFormat formatter = new SimpleDateFormat("MMM d,yyyy");
-                dateString = formatter.format(new Date(time));
+//                Log.v(TAG, "Contact Not Found @ " + number);
+                name  = number;
             }
-        } else {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            dateString = formatter.format(new Date(time));
+            cursor.close();
         }
-        return dateString;
+        return name;
     }
+
+
 }

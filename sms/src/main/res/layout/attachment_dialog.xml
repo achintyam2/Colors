@@ -6,13 +6,25 @@
 
     <RadioButton
         android:id="@+id/photos"
-        android:text="Photos"
+        android:text="Photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <RadioButton
         android:id="@+id/contacts"
-        android:text="Contacts"
+        android:text="Contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RadioButton
+        android:id="@+id/videos"
+        android:text="Video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RadioButton
+        android:id="@+id/audios"
+        android:text="Audio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
