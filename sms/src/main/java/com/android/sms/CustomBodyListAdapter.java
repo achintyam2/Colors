@@ -420,10 +420,10 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
                     Log.d("aa","SMSID "+SmsId);
                     Log.d("aa","pid "+pid);
                     Log.d("aa","message "+smsMessage);
-                    String uri = "content://sms/inbox/"+pid;
+                    String uri = "content://sms/"+pid;
                     Uri mUri = Uri.parse("content://mms-sms/conversations/" + pid);
 //                    int rows = context.getContentResolver().delete(Uri.parse("content://sms"),"_id=?",new String[]{pid});
-                    int rows = context.getContentResolver().delete(Uri.parse("content://sms/conversations/" + threadID), "_id = ?", new String[]{pid});
+                    int rows = context.getContentResolver().delete(Uri.parse(uri), Telephony.Sms._ID + "!=?", new String[]{pid});
                     Toast.makeText(context, rows+" Message Deleted", Toast.LENGTH_LONG).show();
                     notifyDataSetChanged();
                     break;

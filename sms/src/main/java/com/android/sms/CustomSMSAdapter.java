@@ -5,15 +5,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,13 +20,12 @@ class CustomSMSAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
     private Context context;
-    private HashMap<String, MyThread> mapFromSMSVector;
+    private HashMap<String, MyConversation> mapFromSMSVector;
     private String contactName,thread_id;
     private ArrayList<String> threads;
 
-
     CustomSMSAdapter(SMSInboxFragment smsInboxFragment,
-                            HashMap<String, MyThread> receivedSMSMap,
+                            HashMap<String, MyConversation> receivedSMSMap,
                             ArrayList<String> threadIds) {
         context = smsInboxFragment.getContext();
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -53,7 +49,6 @@ class CustomSMSAdapter extends BaseAdapter {
         return 0;
     }
 
-
     private class Holder {
         TextView contactName, smsDate, smsBody, contactID;
     }
@@ -70,12 +65,12 @@ class CustomSMSAdapter extends BaseAdapter {
         holder.smsBody = (TextView) view.findViewById(R.id.sms_body);
         holder.contactID = (TextView) view.findViewById(R.id.contactID);
 
-        MyThread myThread = mapFromSMSVector.get(threads.get(position));
-        thread_id = myThread.getThreadId();
-        contactName = myThread.getName();
+        MyConversation myConversation =  mapFromSMSVector.get(threads.get(position));
+        thread_id = myConversation.getThreadId();
+        contactName = myConversation.getName();
         String cName = getContactName(context,contactName);
-        String date = myThread.getTime();
-        String smsBody = myThread.getMessage();
+        String date = myConversation.getTime();
+        String smsBody = myConversation.getMessage();
         final String contactID = contactName.toUpperCase().substring(0, 1);
 
         holder.contactName.setText(cName);
@@ -86,7 +81,7 @@ class CustomSMSAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MyThread m = (MyThread) getItem(position);
+                    MyConversation m = (MyConversation) getItem(position);
                     String phone = m.getName();
                     String name = getContactName(context,phone);
                     String thread = m.getThreadId();

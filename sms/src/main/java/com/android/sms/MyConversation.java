@@ -1,16 +1,11 @@
 package com.android.sms;
 
-/**
- * Created by Achintya on 18-01-2017.
- */
 
-public class MyThread {
+public class MyConversation {
 
     private String threadId, message, time, name;
 
-    MyThread(){}
-
-    public MyThread(String threadId, String message, String time, String name) {
+    public MyConversation(String threadId, String message, String time, String name) {
         this.threadId = threadId;
         this.message = message;
         this.time = time;
