@@ -25,16 +25,16 @@ import java.util.Vector;
 public class SMSInboxFragment extends Fragment {
 
     ListView smsList;
-    Vector<HashMap<String, MyThread>> vectorSMSList;
+    Vector<HashMap<String, MyConversation>> vectorSMSList;
     Button getSMSList;
     Calendar c;
-    HashMap<String, MyThread> myThreads;
+    HashMap<String, MyConversation> myConversations;
     ArrayList<String> threads;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.sms_inbox_main, container, false);
-        myThreads = new HashMap<>();
+        myConversations = new HashMap<>();
         vectorSMSList = new Vector<>();
         threads = new ArrayList<>();
         c = Calendar.getInstance();
@@ -69,12 +69,12 @@ public class SMSInboxFragment extends Fragment {
             String thread_id = cursor.getString(cursor.getColumnIndex("thread_id"));
 
 
-            if (!myThreads.containsKey(thread_id)) {
-                myThreads.put(thread_id, new MyThread(thread_id, body, dateVal, address));
+            if (!myConversations.containsKey(thread_id)) {
+                myConversations.put(thread_id, new MyConversation(thread_id, body, dateVal, address));
                 threads.add(thread_id);
             }
 
-            vectorSMSList.add(myThreads);
+            vectorSMSList.add(myConversations);
 
         } while  (cursor.moveToNext());
 

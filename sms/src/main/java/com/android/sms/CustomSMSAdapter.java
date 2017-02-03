@@ -21,7 +21,7 @@ class CustomSMSAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     private Context context;
     private HashMap<String, MyConversation> mapFromSMSVector;
-    private String contactName,thread_id;
+    private String contactName;
     private ArrayList<String> threads;
 
     CustomSMSAdapter(SMSInboxFragment smsInboxFragment,
@@ -66,7 +66,7 @@ class CustomSMSAdapter extends BaseAdapter {
         holder.contactID = (TextView) view.findViewById(R.id.contactID);
 
         MyConversation myConversation =  mapFromSMSVector.get(threads.get(position));
-        thread_id = myConversation.getThreadId();
+        String thread_id = myConversation.getThreadId();
         contactName = myConversation.getName();
         String cName = getContactName(context,contactName);
         String date = myConversation.getTime();

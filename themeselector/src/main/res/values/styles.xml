@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="HorizontalList">
+        <item name="android:orientation">horizontal</item>
+    </style>
+
 </resources>

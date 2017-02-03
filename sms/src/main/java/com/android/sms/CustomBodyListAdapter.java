@@ -50,11 +50,12 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
     private Context con;
     private String bodyCopied,nameCopied;
     int msgId;
+    Cursor cursorToPass;
 
      CustomBodyListAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
         c = Calendar.getInstance();
-
+        cursorToPass = cursor;
     }
 
     @Override
@@ -370,7 +371,7 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
     @Override
     public void onDeleteClicked() {
 //        Toast.makeText(con,"To delete : "+bodyCopied,Toast.LENGTH_SHORT).show();
-        deleteMessage(con,msgId);
+        deleteMessage(con,msgId,cursorToPass);
     }
 
     private void showMessageOptionsDialog(String name,String body,int sms_id)
@@ -384,7 +385,7 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
         bodyOnClickDialogFragment.show(fragmentTransaction,"messageoptions");
     }
 
-    private void deleteMessage(Context context,int SmsId) {
+    private void deleteMessage(Context context,int SmsId,Cursor cursor) {
         /*if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             if (!Telephony.Sms.getDefaultSmsPackage(con).equals("com.android.sms")) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this.con);
@@ -409,21 +410,22 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
             }
         }*/
         Cursor c = context.getContentResolver().query(Uri.parse("content://sms/"),new String[] {"_id", "thread_id", "address", "body" }, null, null, null);
-        while (c.moveToNext()) {
+        cursor.moveToFirst();
+        do {
             try {
-                String pid = c.getString(c.getColumnIndex("_id")); // Get id;
-                String threadID = c.getString(c.getColumnIndex("thread_id"));
-                String smsMessage = c.getString(3);
+                String pid = cursor.getString(cursor.getColumnIndex("_id")); // Get id;
+                String threadID = cursor.getString(cursor.getColumnIndex("thread_id"));
+                String smsMessage = cursor.getString(3);
                 String msgId = Integer.toString(SmsId);
+                Log.d("aa","SMSID "+SmsId);
+                Log.d("aa","pid "+pid);
                 if (pid.equals(msgId))
                 {
-                    Log.d("aa","SMSID "+SmsId);
-                    Log.d("aa","pid "+pid);
                     Log.d("aa","message "+smsMessage);
                     String uri = "content://sms/"+pid;
-                    Uri mUri = Uri.parse("content://mms-sms/conversations/" + pid);
+                    Uri mUri = Uri.parse("content://sms/" + pid);
 //                    int rows = context.getContentResolver().delete(Uri.parse("content://sms"),"_id=?",new String[]{pid});
-                    int rows = context.getContentResolver().delete(Uri.parse(uri), Telephony.Sms._ID + "!=?", new String[]{pid});
+                    int rows = context.getContentResolver().delete(Uri.parse(uri),null,null/* Telephony.Sms._ID + "!=?", new String[]{pid}*/);
                     Toast.makeText(context, rows+" Message Deleted", Toast.LENGTH_LONG).show();
                     notifyDataSetChanged();
                     break;
@@ -431,7 +433,7 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
             } catch (Exception e) {
                 Log.d("exception",  "occurred"+e.getMessage());
             }
-        }
+        }while (cursor.moveToNext());
     }
 
     private void forwardMessage(String body)

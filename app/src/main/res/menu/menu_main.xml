@@ -25,4 +25,11 @@
        android:title="@string/button_name"
        />
 
+   <item
+       android:id="@+id/applock_themes"
+       android:icon="@drawable/ic_filter_white_24dp"
+       android:showAsAction="always"
+       android:title="Applock Themes"
+       />
+
 </menu>

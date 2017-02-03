@@ -2,9 +2,11 @@ package fragments.android.com.colors;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -47,19 +49,6 @@ import contacts.android.themeselector.ColorsDialogFragment;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        /*try {
-            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.e("MY KEY HASH:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (Exception e) {
-
-        }*/
-
 
         context = this;                  //Setting the context to this activity
         myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -167,6 +156,10 @@ import contacts.android.themeselector.ColorsDialogFragment;
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ColorsDialogFragment newFragment = ColorsDialogFragment.newInstance();
                 newFragment.show(ft, "title");
+                return true;
+            case R.id.applock_themes:
+                Intent intent = new Intent(MainActivity.this, ThemeSelection.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

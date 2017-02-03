@@ -46,6 +46,7 @@
         <activity android:name="contacts.android.socialmedia.GoogleActivity" />
         <activity android:name="com.android.sms.OpenInbox"/>
         <activity android:name="com.android.mms.Inbox"/>
+        <activity android:name=".ThemeSelection"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
