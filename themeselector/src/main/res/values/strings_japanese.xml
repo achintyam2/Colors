@@ -1,121 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">App Lock</string>
-    <string name="fake_app_name_clock">Clock</string>
-    <string name="fake_app_name_weather">Weather</string>
-    <string name="fake_app_name_notes">Notes</string>
-    <string name="fake_app_name_calc">Calculator</string>
-    <string name="fake_app_name_calendar">Calendar</string>
+    <string name="app_name">アプリロック</string>
+    <string name="fake_app_name_clock">クロック</string>
+    <string name="fake_app_name_weather">天気</string>
+    <string name="fake_app_name_notes">ノート</string>
+    <string name="fake_app_name_calc">電卓</string>
+    <string name="fake_app_name_calendar">カレンダー</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">ナビゲーション・ドロワーを開く</string>
+    <string name="navigation_drawer_close">ナビゲーション・ドロワーを閉じる</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">設定</string>
 
-    <string name="pl_cancel">Cancel</string>
-    <string name="pl_confirm">Confirm</string>
-    <string name="pl_confirm_pattern">Draw again to confirm</string>
-    <string name="pl_continue">Continue</string>
-    <string name="pl_draw_pattern">Draw an unlock pattern</string>
-    <string name="pl_draw_pattern_to_unlock">Draw pattern to unlock</string>
-    <string name="pl_forgot_pattern">Forgot pattern</string>
-    <string name="pl_pattern_confirmed">Your new unlock pattern</string>
-    <string name="pl_pattern_recorded">Pattern recorded</string>
-    <string name="pl_pattern_too_short">Connect at least %d dots, please redraw</string>
-    <string name="pl_recording_pattern">Release finger when done</string>
-    <string name="pl_redraw">Redraw</string>
-    <string name="pl_wrong_pattern">Wrong pattern, please retry</string>
+    <string name="pl_cancel">キャンセル</string>
+    <string name="pl_confirm">確認</string>
+    <string name="pl_confirm_pattern">確認のためにもう一度描く</string>
+    <string name="pl_continue">持続する</string>
+    <string name="pl_draw_pattern">アンロックパターンを描く</string>
+    <string name="pl_draw_pattern_to_unlock">ロックを解除するパターンを描く</string>
+    <string name="pl_forgot_pattern">パターンを忘れた</string>
+    <string name="pl_pattern_confirmed">あなたの新しいロック解除パターン</string>
+    <string name="pl_pattern_recorded">パターンが記録された</string>
+    <string name="pl_pattern_too_short">少なくとも%dドットを接続してください。再描画してください</string>
+    <string name="pl_recording_pattern">完了したら指を離す</string>
+    <string name="pl_redraw">再描画</string>
+    <string name="pl_wrong_pattern">間違ったパターン、再試行してください</string>
 
-    <string name="pl_access_pattern_start">Pattern started</string>
-    <string name="pl_access_pattern_cleared">Pattern cleared</string>
-    <string name="pl_access_pattern_cell_added">Cell added</string>
-    <string name="pl_access_pattern_cell_added_verbose">Cell <xliff:g id="cell_index" example="3">%1$s</xliff:g> added</string>
-    <string name="pl_access_pattern_detected">Pattern completed</string>
-    <string name="pl_access_pattern_area">Pattern area.</string>
+    <string name="pl_access_pattern_start">パターンが開始されました</string>
+    <string name="pl_access_pattern_cleared">パターンがクリアされました</string>
+    <string name="pl_access_pattern_cell_added">セルが追加されました</string>
+    <string name="pl_access_pattern_cell_added_verbose">細胞 <xliff:g id="cell_index" example="3">%1$s</xliff:g> 追加された</string>
+    <string name="pl_access_pattern_detected">パターンが完了しました</string>
+    <string name="pl_access_pattern_area">パターン領域</string>
 
-    <string name="enroll">Enroll</string>
-    <string name="verify">Verify</string>
+    <string name="enroll">登録する</string>
+    <string name="verify">確認</string>
 
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="permission">Permission</string>
-    <string name="usage_permission">For protection, please allow access permission.</string>
-    <string name="stop_protection">Stop protection</string>
-    <string name="stop_protection_text">Do you want to keep your apps unprotected ?</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="permission">許可</string>
+    <string name="usage_permission">保護のため、アクセス許可を許可してください。</string>
+    <string name="stop_protection">保護を止める</string>
+    <string name="stop_protection_text">あなたのアプリを保護されないままにしますか？</string>
 
-    <string name="always_ask">Always ask</string>
-    <string name="five_mintues">For 5 minutes</string>
-    <string name="until_screen_on">Until Screen is on</string>
-    <string name="time_limit">Lock time limit</string>
+    <string name="always_ask">常に尋ねる</string>
+    <string name="five_mintues">5分間</string>
+    <string name="until_screen_on">画面が表示されるまで</string>
+    <string name="time_limit">ロックの時間制限</string>
 
-    <string name="search">search</string>
-    <string name="stop_service">Stop protection</string>
-    <string name="start_service">Start protection</string>
+    <string name="search">サーチ</string>
+    <string name="stop_service">保護を止める</string>
+    <string name="start_service">保護を開始する</string>
 
-    <string name="lock_apps">Lock apps</string>
-    <string name="fake_icons">Fake cover</string>
-    <string name="reset_pattern">Reset pattern</string>
-    <string name="intruder_photos">Intruder photos</string>
-    <string name="reset_questions">Reset questions</string>
-    <string name="rate_us">Rate us</string>
-    <string name="feedback">Feedback</string>
-    <string name="share">Share</string>
-    <string name="settings">Settings</string>
-    <string name="delete">Delete</string>
+    <string name="lock_apps">アプリをロックする</string>
+    <string name="fake_icons">フェイクカバー</string>
+    <string name="reset_pattern">リセットパターン</string>
+    <string name="intruder_photos">侵入者の写真</string>
+    <string name="reset_questions">質問をリセットする</string>
+    <string name="rate_us">私たちを評価してください</string>
+    <string name="feedback">フィードバック</string>
+    <string name="share">シェア</string>
+    <string name="settings">設定</string>
+    <string name="delete">削除</string>
 
-    <string name="secured">secured</string>
+    <string name="secured">安全な</string>
 
-    <string name="all_apps">All Apps</string>
-    <string name="recommended_apps">Recommended Apps</string>
-    <string name="app_usage_message">Find AppLock and enable it</string>
+    <string name="all_apps">すべてのアプリ</string>
+    <string name="recommended_apps">おすすめアプリ</string>
+    <string name="app_usage_message">アプリのロックを見つけて有効にする</string>
 
-    <string name="answer_any_two">Complete enrollment by answering any 2 questions</string>
-    <string name="answer_questions">Answer following questions to reset unlock pattern</string>
+    <string name="answer_any_two">任意の2つの質問に答えることで登録を完了</string>
+    <string name="answer_questions">アンロックパターンをリセットするには以下の質問に答えてください</string>
 
-    <string name="ques1">Who is your favorite actor/actress, musician, or artist?</string>
-    <string name="ques2">What is the name of your favorite pet?</string>
-    <string name="ques3">In what city were you born?</string>
+    <string name="ques1">あなたの好きな俳優/女優、ミュージシャン、アーティストは誰ですか？</string>
+    <string name="ques2">あなたの好きなペットの名前は何ですか？</string>
+    <string name="ques3">あなたは生まれましたか？</string>
 
-    <string name="thank_you">Thank you</string>
-    <string name="answer_atleast_two">Answer atleast 2</string>
-    <string name="incorrect_answers">Incorrect answers. Please try again</string>
-    <string name="correct_answers">Correct answers</string>
-    <string name="lockout_message">You have been locked out. Please try after 1 min</string>
+    <string name="thank_you">ありがとうございました</string>
+    <string name="answer_atleast_two">少なくとも2回答</string>
+    <string name="incorrect_answers">間違った答え。もう一度お試しください</string>
+    <string name="correct_answers">正解</string>
+    <string name="lockout_message">あなたはロックアウトされています。 1分後に試してください</string>
 
-    <string name="intruder_photos_list">Intruder Photos list</string>
-    <string name="intruder_photo">Intruder Photo</string>
-    <string name="photos">photos</string>
-    <string name="disable">DISABLE</string>
-    <string name="enable">ENABLE</string>
-    <string name="delete_all">Delete All</string>
-    <string name="intruder_msg">This guy was trying to break in your AppLock.</string>
+    <string name="intruder_photos_list">侵入者の写真リスト</string>
+    <string name="intruder_photo">侵入者写真</string>
+    <string name="photos">写真</string>
+    <string name="disable">無効</string>
+    <string name="enable">有効にする</string>
+    <string name="delete_all">すべて削除</string>
+    <string name="intruder_msg">この男はあなたのロックを解除しようとしていた。</string>
 
-    <string name="select_lock">Selected lock</string>
+    <string name="select_lock">選択されたロック</string>
     <string-array name="lock_types_titles">
-        <item>Pattern</item>
-        <item>Pin</item>
+        <item>パターン</item>
+        <item>ピン</item>
     </string-array>
     <string-array name="lock_types_values">
-        <item>Pattern</item>
-        <item>Pin</item>
+        <item>パターン</item>
+        <item>ピン</item>
     </string-array>
 
-    <string name="pattern">Pattern</string>
-    <string name="pin">Pin</string>
+    <string name="pattern">パターン</string>
+    <string name="pin">ピン</string>
 
-    <string name="hide_pattern">Hide pattern lines</string>
-    <string name="hide_pattern_summary">Lines will not be displayed when you enter your pattern.</string>
+    <string name="hide_pattern">パターン行を隠す</string>
+    <string name="hide_pattern_summary">パターンを入力すると、線は表示されません。</string>
 
     <string-array name="time_limit_titles">
-        <item>Always ask</item>
-        <item>For 5 minutes</item>
-        <item>Until Screen is on</item>
+        <item>常に尋ねる</item>
+        <item>5分間</item>
+        <item>画面が表示されるまで</item>
     </string-array>
     <string-array name="time_limit_values">
-        <item>Always ask</item>
-        <item>For 5 minutes</item>
-        <item>Until Screen is on</item>
+        <item>常に尋ねる</item>
+        <item>5分間</item>
+        <item>画面が表示されるまで</item>
     </string-array>
 
-    <string name="reset_lock">Reset lock</string>
+    <string name="reset_lock">リセットロック</string>
 </resources>
