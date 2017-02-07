@@ -108,8 +108,6 @@ public class AttachmentDIalogFragment extends DialogFragment {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
 
-
-
                 Uri selectedImageUri = data.getData();
                 try {
                     bitmapPhoto = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),selectedImageUri);
