@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +40,7 @@ public class ThemeSelection extends AppCompatActivity {
     ArrayList<Bitmap> listImages;
     ImagesListCustomAdapter imagesListCustomAdapter;
     int height,width;
+    Bitmap bitmapPhoto;
 
 
     @Override
@@ -52,6 +55,8 @@ public class ThemeSelection extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         height = displaymetrics.heightPixels;
         width = displaymetrics.widthPixels;
+
+        Log.d("aa","height & width : "+height +"  "+width);
 
         toolbar = (Toolbar) findViewById(R.id.my_toolbar_black);
         listLayout = (LinearLayout) findViewById(R.id.list_layout);
@@ -106,10 +111,30 @@ public class ThemeSelection extends AppCompatActivity {
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
                     imagesListCustomAdapter.notifyDataSetChanged();
-                }
-
-                if (position != listImages.size()-1) {
-                    Drawable d = new BitmapDrawable(getResources(), listImages.get(position));
+                } else {
+                    Bitmap bitmap = null;
+                    if (position == 0)
+                    {
+                        bitmap = getFullSize(R.drawable.one);
+                    }
+                    else if (position == 1)
+                    {
+                        bitmap = getFullSize(R.drawable.two);
+                    }
+                    else if (position == 2)
+                    {
+                        bitmap = getFullSize(R.drawable.three);
+                    }
+                    else if (position == 3)
+                    {
+                        bitmap = getFullSize(R.drawable.four);
+                    }
+                    else
+                    {
+                        //TODO get the full size image
+                        bitmap = bitmapPhoto;
+                    }
+                    Drawable d = new BitmapDrawable(getResources(), bitmap);
                     if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN)
                         full_screen_layout.setBackgroundDrawable(d);
                     else
@@ -142,7 +167,7 @@ public class ThemeSelection extends AppCompatActivity {
     {
         Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), fileName);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Bitmap resized = ThumbnailUtils.extractThumbnail(icon, (15*width)/100, (15*height)/100);
+        Bitmap resized = ThumbnailUtils.extractThumbnail(icon, (25*width)/100, (20*height)/100);
         resized.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return resized;
     }
@@ -154,21 +179,34 @@ public class ThemeSelection extends AppCompatActivity {
         {
             if (requestCode == 1)
             {
-                Bitmap bitmapPhoto = null;
+
                 Bitmap resized = null;
                 Uri selectedImageUri = data.getData();
                 try {
                     bitmapPhoto = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),selectedImageUri);
+
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    resized = ThumbnailUtils.extractThumbnail(bitmapPhoto, (15*width)/100, (15*height)/100);
+                    resized = ThumbnailUtils.extractThumbnail(bitmapPhoto, (25*width)/100, (20*height)/100);
                     resized.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 listImages.add(listImages.size()-1,resized);
+                Drawable d = new BitmapDrawable(getResources(), bitmapPhoto);
+                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN)
+                    full_screen_layout.setBackgroundDrawable(d);
+                else
+                    full_screen_layout.setBackground(d);
                 imagesListCustomAdapter.notifyDataSetChanged();
             }
         }
     }
-
+    private Bitmap getFullSize(int file)
+    {
+        Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), file);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Bitmap resized = ThumbnailUtils.extractThumbnail(icon, width, height);
+        resized.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        return resized;
+    }
 }
