@@ -142,7 +142,7 @@ public class ThemeSelection extends AppCompatActivity {
     {
         Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), fileName);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Bitmap resized = ThumbnailUtils.extractThumbnail(icon, (25*width)/100, (25*height)/100);
+        Bitmap resized = ThumbnailUtils.extractThumbnail(icon, (15*width)/100, (15*height)/100);
         resized.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return resized;
     }
@@ -155,13 +155,17 @@ public class ThemeSelection extends AppCompatActivity {
             if (requestCode == 1)
             {
                 Bitmap bitmapPhoto = null;
+                Bitmap resized = null;
                 Uri selectedImageUri = data.getData();
                 try {
                     bitmapPhoto = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),selectedImageUri);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    resized = ThumbnailUtils.extractThumbnail(bitmapPhoto, (15*width)/100, (15*height)/100);
+                    resized.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                listImages.add(listImages.size()-1,bitmapPhoto);
+                listImages.add(listImages.size()-1,resized);
                 imagesListCustomAdapter.notifyDataSetChanged();
             }
         }
