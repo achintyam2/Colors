@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="http://schemas.android.com/tools">
+
+    <string name="app_name">Verrou d\'application</string>
+    <string name="fake_app_name_clock">l\'horloge</string>
+    <string name="fake_app_name_weather">Météo</string>
+    <string name="fake_app_name_notes">Remarques</string>
+    <string name="fake_app_name_calc">Calculatrice</string>
+    <string name="fake_app_name_calendar">Calendrier</string>
+
+    <string name="navigation_drawer_open">Ouvrir le tiroir de navigation</string>
+    <string name="navigation_drawer_close">Fermer le tiroir de navigation</string>
+
+    <string name="action_settings">Paramètres</string>
+
+    <string name="pl_cancel">Annuler</string>
+    <string name="pl_confirm">Confirmer</string>
+    <string name="pl_confirm_pattern">Dessiner à nouveau pour confirmer</string>
+    <string name="pl_continue">Continuer</string>
+    <string name="pl_draw_pattern">Dessiner un motif de déverrouillage</string>
+    <string name="pl_draw_pattern_to_unlock">Dessiner le motif à débloquer</string>
+    <string name="pl_forgot_pattern">Mot de passe oublié</string>
+    <string name="pl_pattern_confirmed">Votre nouveau modèle de déverrouillage</string>
+    <string name="pl_pattern_recorded">Modèle enregistré</string>
+    <string name="pl_pattern_too_short">Connectez au moins %d les points, s\'il vous plaît redessiner</string>
+    <string name="pl_recording_pattern">Relâchez le doigt lorsque vous</string>
+    <string name="pl_redraw">Redessiner</string>
+    <string name="pl_wrong_pattern">Modèle incorrect, veuillez réessayer</string>
+
+    <string name="pl_access_pattern_start">Modèle démarré</string>
+    <string name="pl_access_pattern_cleared">Modèle effacé</string>
+    <string name="pl_access_pattern_cell_added">Cellule ajoutée</string>
+    <string name="pl_access_pattern_cell_added_verbose">Cellule <xliff:g id="cell_index" example="3">%1$s</xliff:g> ajoutée</string>
+    <string name="pl_access_pattern_detected">Modèle terminé</string>
+    <string name="pl_access_pattern_area">Zone de motif.</string>
+
+    <string name="enroll">Inscrire</string>
+    <string name="verify">Vérifier</string>
+
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="permission">Autorisation</string>
+    <string name="usage_permission">Pour la protection, veuillez autoriser l\'accès.</string>
+    <string name="stop_protection">Arrêter la protection</string>
+    <string name="stop_protection_text">Voulez-vous conserver vos applications non protégées?</string>
+
+    <string name="always_ask">Demandez toujours</string>
+    <string name="five_mintues">Pendant 5 minutes</string>
+    <string name="until_screen_on">Jusqu\'à ce que l\'écran soit activé</string>
+    <string name="time_limit">Limite de temps de verrouillage</string>
+
+    <string name="search">chercher</string>
+    <string name="stop_service">Arrêter la protection</string>
+    <string name="start_service">Démarrer la protection</string>
+
+    <string name="lock_apps">Verrouiller les applications</string>
+    <string name="fake_icons">Fausse couverture</string>
+    <string name="reset_pattern">Réinitialiser le modèle</string>
+    <string name="intruder_photos">Photos Intruder</string>
+    <string name="reset_questions">Réinitialiser les questions</string>
+    <string name="rate_us">Évaluez nous</string>
+    <string name="feedback">Retour d\'information</string>
+    <string name="share">Partager</string>
+    <string name="settings">Paramètres</string>
+    <string name="delete">Effacer</string>
+
+    <string name="secured">Sécurisé</string>
+
+    <string name="all_apps">Toutes les applications</string>
+    <string name="recommended_apps">Applications recommandées</string>
+    <string name="app_usage_message">Rechercher App Lock et activer</string>
+
+    <string name="answer_any_two">Compléter l\'inscription en répondant à 2 questions</string>
+    <string name="answer_questions">Répondre aux questions suivantes pour réinitialiser le déverrouillage</string>
+
+    <string name="ques1">Qui est votre acteur / actrice, musicien ou artiste préféré?</string>
+    <string name="ques2">Quel est le nom de votre animal favori?</string>
+    <string name="ques3">Dans quelle ville êtes-vous né?</string>
+
+    <string name="thank_you">Je vous remercie</string>
+    <string name="answer_atleast_two">Répondre au moins 2</string>
+    <string name="incorrect_answers">Réponses incorrectes. Veuillez réessayer</string>
+    <string name="correct_answers">Bonnes réponses</string>
+    <string name="lockout_message">Vous avez été bloqué. Essayez après 1 minute</string>
+
+    <string name="intruder_photos_list">Intruder Liste des photos</string>
+    <string name="intruder_photo">Intruder Photo</string>
+    <string name="photos">photos</string>
+    <string name="disable">Désactiver</string>
+    <string name="enable">ACTIVER</string>
+    <string name="delete_all">Supprimer tout</string>
+    <string name="intruder_msg">Ce type essayait de briser votre Verrou d\'application.</string>
+
+    <string name="select_lock">Verrouillage sélectionné</string>
+    <string-array name="lock_types_titles">
+        <item>Modèle</item>
+        <item>Épingle</item>
+    </string-array>
+    <string-array name="lock_types_values">
+        <item>Modèle</item>
+        <item>Épingle</item>
+    </string-array>
+
+    <string name="pattern">Modèle</string>
+    <string name="pin">Épingle</string>
+
+    <string name="hide_pattern">Masquer les lignes de motif</string>
+    <string name="hide_pattern_summary">Les lignes ne s\'affichent pas lorsque vous saisissez votre motif.</string>
+
+    <string-array name="time_limit_titles">
+        <item>Demandez toujours</item>
+        <item>Pendant 5 minutes</item>
+        <item>Jusqu\'à ce que l\'écran soit activé</item>
+    </string-array>
+    <string-array name="time_limit_values">
+        <item>Demandez toujours</item>
+        <item>Pendant 5 minutes</item>
+        <item>Jusqu\'à ce que l\'écran soit activé</item>
+    </string-array>
+
+    <string name="reset_lock">Réinitialiser le verrou</string>
+
+</resources>

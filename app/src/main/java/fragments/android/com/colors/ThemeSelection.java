@@ -1,10 +1,9 @@
 package fragments.android.com.colors;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
@@ -23,11 +22,9 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-
 
 public class ThemeSelection extends AppCompatActivity {
 
@@ -36,12 +33,11 @@ public class ThemeSelection extends AppCompatActivity {
     LinearLayout listLayout;
     ListView list_images;
     RelativeLayout full_screen_layout;
-    int count =0;
+    boolean flag = true;
     ArrayList<Bitmap> listImages;
     ImagesListCustomAdapter imagesListCustomAdapter;
     int height,width;
     Bitmap bitmapPhoto;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +46,7 @@ public class ThemeSelection extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        AssetManager assetManager = getAssets();
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
@@ -62,8 +59,6 @@ public class ThemeSelection extends AppCompatActivity {
         listLayout = (LinearLayout) findViewById(R.id.list_layout);
         full_screen_layout = (RelativeLayout) findViewById(R.id.full_screen_layout);
         list_images = (ListView) findViewById(R.id.list_images);
-
-//       int[] images = new int[]{R.drawable.one, R.drawable.two, R.drawable.three,R.drawable.four};
 
         listImages  = new ArrayList<>();
         listImages.add(getDRawable(R.drawable.one));
@@ -89,15 +84,15 @@ public class ThemeSelection extends AppCompatActivity {
         full_screen_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (count == 0) {
+                if (flag) {
                     toolbar.setVisibility(View.GONE);
                     listLayout.setVisibility(View.GONE);
-                    count =1;
+                    flag = false;
                 }
-                else if (count == 1) {
+                else  {
                     toolbar.setVisibility(View.VISIBLE);
                     listLayout.setVisibility(View.VISIBLE);
-                    count = 0;
+                    flag = true;
                 }
             }
         });
@@ -140,7 +135,6 @@ public class ThemeSelection extends AppCompatActivity {
                     else
                         full_screen_layout.setBackground(d);
                 }
-
             }
         });
 
@@ -159,7 +153,6 @@ public class ThemeSelection extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
@@ -167,7 +160,7 @@ public class ThemeSelection extends AppCompatActivity {
     {
         Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(), fileName);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Bitmap resized = ThumbnailUtils.extractThumbnail(icon, (25*width)/100, (20*height)/100);
+        Bitmap resized = ThumbnailUtils.extractThumbnail(icon, (22*width)/100, (20*height)/100);
         resized.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return resized;
     }
@@ -179,14 +172,12 @@ public class ThemeSelection extends AppCompatActivity {
         {
             if (requestCode == 1)
             {
-
                 Bitmap resized = null;
                 Uri selectedImageUri = data.getData();
                 try {
                     bitmapPhoto = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),selectedImageUri);
-
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    resized = ThumbnailUtils.extractThumbnail(bitmapPhoto, (25*width)/100, (20*height)/100);
+                    resized = ThumbnailUtils.extractThumbnail(bitmapPhoto, (22*width)/100, (20*height)/100);
                     resized.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 } catch (IOException e) {
                     e.printStackTrace();
