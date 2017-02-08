@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">sms</string>
+    <string name="received">Received</string>
+    <string name="sent">Sent</string>
+    <string name="failed">Failed</string>
+    <string name="draft">Draft</string>
 </resources>

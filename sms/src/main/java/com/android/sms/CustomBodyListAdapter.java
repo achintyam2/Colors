@@ -1,28 +1,16 @@
 package com.android.sms;
 
-import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Telephony;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.text.Html;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,21 +20,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFragment.MessageOptionsDialogClickHandler{
-    private Calendar c;
+
     private Context con;
     private String bodyCopied,nameCopied;
     int msgId;
@@ -54,7 +37,7 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
 
      CustomBodyListAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
-        c = Calendar.getInstance();
+
         cursorToPass = cursor;
     }
 
@@ -116,7 +99,7 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
                 smsBodyReceived.setText(body);
                 smsTimeReceived.setText(timeSent);
                 smsTimeReceived.setTextColor(Color.YELLOW);
-                smsStatusReceived.setText("Received");
+                smsStatusReceived.setText(context.getResources().getString(R.string.received));
                 smsStatusReceived.setTextColor(Color.GREEN);
                 smsDateReceived.setText(dateSent);
                 smsReceived.setOnLongClickListener(new View.OnLongClickListener() {
@@ -136,7 +119,7 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
                 smsTimeSent.setText(timeReceived);
                 smsTimeSent.setTextColor(Color.YELLOW);
                 smsStatusSent.setTextColor(Color.GREEN);
-                smsStatusSent.setText("Sent");
+                smsStatusSent.setText(context.getResources().getString(R.string.sent));
                 smsDateSent.setText(dateReceived);
                 smsSent.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -156,7 +139,7 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
                 smsTimeSent.setText(timeReceived);
                 smsTimeSent.setTextColor(Color.YELLOW);
                 smsStatusSent.setTextColor(Color.RED);
-                smsStatusSent.setText("Failed");
+                smsStatusSent.setText(context.getResources().getString(R.string.failed));
                 smsDateSent.setText(dateReceived);
                 smsSent.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -177,7 +160,7 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
                 smsTimeSent.setText(timeReceived);
                 smsTimeSent.setTextColor(Color.YELLOW);
                 smsStatusSent.setTextColor(Color.BLUE);
-                smsStatusSent.setText("Draft");
+                smsStatusSent.setText(context.getResources().getString(R.string.draft));
                 smsDateSent.setText(dateReceived);
                 smsSent.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
@@ -197,17 +180,17 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
                 smsSent.setVisibility(View.GONE);
                 if (msg_box == 4)
                 {
-                    mmsStatusSent.setText("Failed");
+                    mmsStatusSent.setText(context.getResources().getString(R.string.failed));
                     mmsStatusSent.setTextColor(Color.RED);
                 }
                 else if (msg_box == 2)
                 {
-                    mmsStatusSent.setText("Sent");
+                    mmsStatusSent.setText(context.getResources().getString(R.string.sent));
                     mmsStatusSent.setTextColor(Color.GREEN);
                 }
                 else
                 {
-                    mmsStatusSent.setText("Draft");
+                    mmsStatusSent.setText(context.getResources().getString(R.string.draft));
                     mmsStatusSent.setTextColor(Color.BLUE);
                 }
                 long second = seconds * 1000;
@@ -224,7 +207,7 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
                 mmsReceived.setVisibility(View.VISIBLE);
                 smsReceived.setVisibility(View.GONE);
                 smsSent.setVisibility(View.GONE);
-                mmsStatusReceived.setText("Received");
+                mmsStatusReceived.setText(context.getResources().getString(R.string.received));
                 readImage(msg_id, mmsPictureReceived);
                 mmsDateReceived.setText(dateSent);
                 mmsTimeReceived.setText(timeSent);
@@ -325,15 +308,13 @@ class CustomBodyListAdapter extends CursorAdapter implements BodyOnClickDialogFr
     private String getDate(long timeStamp) {
         Date date = new Date(timeStamp);
         DateFormat formatter = new SimpleDateFormat("MMMM d,yyyy");
-        String dateString = formatter.format(date);
-        return dateString;
+        return formatter.format(date);
     }
 
     private String getTime(long timeStamp) {
         Date date = new Date(timeStamp);
         DateFormat formatter = new SimpleDateFormat("h:mm a");
-        String dateString = formatter.format(date);
-        return dateString;
+        return formatter.format(date);
     }
 
 
